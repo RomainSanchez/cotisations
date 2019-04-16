@@ -1,0 +1,129 @@
+{
+  "restApiRoot": "/api",
+  "host": "0.0.0.0",
+  "port": 3000,
+  "remoting": {
+    "context": false,
+    "rest": {
+      "handleErrors": false,
+      "normalizeHttpPath": false,
+      "xml": false
+    },
+    "json": {
+      "strict": false,
+      "limit": "100kb"
+    },
+    "urlencoded": {
+      "extended": true,
+      "limit": "100kb"
+    },
+    "cors": false
+  },
+  "app": {
+    "mail": {
+      "base": {
+        "host": "smtp.cdg29.fr",
+        "port": 25,
+        "secure": false,
+        "debug": true,
+        "logger": true
+      },
+      "mailoptions": {
+        "from": "assistance.informatique@cdg29.bzh",
+        "to": "tmidy@cdg29.bzh,ilemoal@cdg29.bzh"
+      }
+    },
+    "vocabulary": {
+      "code": "CodeAgirhe",
+      "Aff": "Affilié",
+      "M1": "01",
+      "M2": "02",
+      "M3": "03",
+      "M4": "04",
+      "M5": "05",
+      "M6": "06",
+      "M7": "07",
+      "M8": "08",
+      "M9": "09",
+      "M10": "10",
+      "M11": "11",
+      "M12": "12",
+      "A1": "CNRACL",
+      "A2": "REGIME_GENERAL",
+      "A3": "DROIT_PRIVE",
+      "Addit1": "Additionnelle",
+      "Addit2": "Santé au travail",
+      "Addit3": "Socle commun",
+      "Oblig": "Obligatoire"
+    },
+    "service_params": {
+      "annee": [
+        "2017",
+        "2018",
+        "2019"
+      ],
+      "type_cotisation": [
+        "Additionnelle",
+        "Santé au travail",
+        "Socle commun",
+        "Obligatoire"
+      ],
+      "mois": [
+        "Janvier",
+        "Février",
+        "Mars",
+        "Avril",
+        "Mai",
+        "Juin",
+        "Juillet",
+        "Août",
+        "Septembre",
+        "Octobre",
+        "Novembre",
+        "Décembre"
+      ]
+    },
+    "soap": {
+      "url": "http://service.agirhe-cdg.fr/sagirhe.asmx?wsdl",
+      "services": {
+        "recapCotis": {
+          "name": "RecapCotis",
+          "data": {
+            "sreponse": {
+              "base": "cdg29",
+              "User": "ADM",
+              "PassW": "cotisations",
+              "Periodicite": "",
+              "Annee": "",
+              "Params": "JAN,FEV,MAR,AVR,MAI,JUN,JUI,AOU,SEP,OCT,NOV,DEC,OBL,AD1,AD2,AD3,TOU,AS1,AS2,AS3,AS4"
+            }
+          }
+        },
+        "listeCollectivites": {
+          "name": "ListeCollectivite",
+          "data": {
+            "spassword": "!*cdG@29"
+          }
+        },
+        "listeAgents": {
+          "name": "ListeAgentCollec",
+          "data": {
+            "spassword": "!*cdG@29",
+            "scollec": ""
+          }
+        },
+        "recapCotisColl": {
+          "name": "RecapCotisColl",
+          "data": {
+            "sreponse": {
+              "base": "cdg29",
+              "User": "ADM",
+              "PassW": "cotisations",
+              "Annee": ""
+            }
+          }
+        }
+      }
+    }
+  }
+}

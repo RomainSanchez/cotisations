@@ -1,0 +1,47 @@
+{
+  "name": "Community",
+  "plural": "Communities",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "address": {
+      "type": "string"
+    },
+    "agirheCode": {
+      "type": "string",
+      "required": true
+    },
+    "postcode": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "siret": {
+      "type": "string"
+    },
+    "personInCharge": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "periodicity": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

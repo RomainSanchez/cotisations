@@ -1,0 +1,48 @@
+{
+  "name": "Debt",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "date": {
+      "type": "string"
+    },
+    "agirheCode": {
+      "type": "string"
+    },
+    "dissolved": {
+      "type": "boolean"
+    },
+    "amount": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "communityType": {
+      "type": "string"
+    },
+    "basis": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "community": {
+      "type": "belongsTo",
+      "model": "Community",
+      "foreignKey": "communityId",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

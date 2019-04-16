@@ -1,0 +1,66 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "mysql"
+  },
+  "AccessToken": {
+    "dataSource": "mysql",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mysql",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mysql",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "mysql",
+    "public": false
+  },
+  "Community": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Periodicity": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Payment": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Import": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Comment": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Agent": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Debt": {
+    "dataSource": "mysql",
+    "public": true
+  }
+}

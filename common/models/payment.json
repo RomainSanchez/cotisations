@@ -1,0 +1,54 @@
+{
+  "name": "Payment",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "foreignKeys": {},
+  "properties": {
+    "date": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "debit": {
+      "type": "string",
+      "required": true
+    },
+    "credit": {
+      "type": "string"
+    },
+    "valueDate": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "import": {
+      "type": "belongsTo",
+      "model": "Import",
+      "foreignKey": "importId",
+      "options": {
+        "nestRemoting": true
+      }
+    },
+    "community": {
+      "type": "belongsTo",
+      "model": "Community",
+      "foreignKey": "communityId",
+      "options": {
+        "nestRemoting": true
+      }
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

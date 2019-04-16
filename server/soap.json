@@ -1,0 +1,43 @@
+
+{
+    "url": "http://service.agirhe-cdg.fr/sagirhe.asmx?wsdl",
+    "services": [
+      {
+        "name": "RecapCotis",
+        "data": {
+          "sreponse": {
+            "base": "cdg29",
+            "User": "ADM",
+            "PassW": "cotisations",
+            "Periodicite": "",
+            "Annee": "",
+            "Params": "JAN,FEV,MAR,AVR,MAI,JUN,JUI,AOU,SEP,OCT,NOV,DEC,OBL,AD1,AD2,AD3,TOU,AS1,AS2,AS3,AS4"
+          }
+        }
+      },
+      {
+        "name": "ListeCollectivite",
+        "data": {
+          "spassword": "!*cdG@29"
+        }
+      },
+      {
+        "name": "ListeAgentCollec",
+        "data": {
+          "spassword": "!*cdG@29",
+          "scollec": ""
+        }
+      },
+      {
+        "name": "RecapCotisColl",
+        "data": {
+          "sreponse": {
+            "base": "cdg29",
+            "User": "ADM",
+            "PassW": "cotisations",
+            "Annee": ""
+          }
+        }
+      }
+    ]
+}
