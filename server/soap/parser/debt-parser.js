@@ -1,5 +1,5 @@
 module.exports = {
-    parse: (data, vocabulary) => {
+    parse: async (data, vocabulary, model) => {
         const raw = data.RecapCotisResult.diffgram.DocumentElement.COTISATION;
         const regex = new RegExp('^M([0-9]){1,2}_A([1-3]){1}_Addit([1-3]){1}');
         const regexOblig = new RegExp('^M([0-9]){1,2}_A([1-3]){1}_Oblig');
@@ -26,7 +26,6 @@ module.exports = {
                             amount: null,
                             communityType: 'Autre',
                             dissolved: true,
-                            community: getCommunity(rawDebt.code)
                         }:
                         {
                             agirheCode: rawDebt.code,
@@ -36,7 +35,6 @@ module.exports = {
                             amount: rawDebt[label],
                             communityType: rawDebt.TypeCollectivite,
                             dissolved: false,
-                            community: getCommunity(rawDebt.code)
                         }
                     ;
                 }
@@ -50,8 +48,4 @@ module.exports = {
 
         return debts;
     }
-}
-
-const getCommunity = agirheCode => {
-
 }

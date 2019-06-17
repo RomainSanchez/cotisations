@@ -50,12 +50,9 @@ import { SocketConnection } from './sockets/socket.connections';
 import { RealTime } from './services/core/real.time';
 import { UserApi } from './services/custom/User';
 import { CommunityApi } from './services/custom/Community';
-import { MembershipTypeApi } from './services/custom/MembershipType';
 import { PeriodicityApi } from './services/custom/Periodicity';
 import { PaymentApi } from './services/custom/Payment';
 import { ImportApi } from './services/custom/Import';
-import { BasisApi } from './services/custom/Basis';
-import { CommunityTypeApi } from './services/custom/CommunityType';
 import { CommentApi } from './services/custom/Comment';
 import { AgentApi } from './services/custom/Agent';
 import { DebtApi } from './services/custom/Debt';
@@ -91,12 +88,9 @@ export class SDKBrowserModule {
         RealTime,
         UserApi,
         CommunityApi,
-        MembershipTypeApi,
         PeriodicityApi,
         PaymentApi,
         ImportApi,
-        BasisApi,
-        CommunityTypeApi,
         CommentApi,
         AgentApi,
         DebtApi,

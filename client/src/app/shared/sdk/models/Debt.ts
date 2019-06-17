@@ -1,4 +1,7 @@
 /* tslint:disable */
+import {
+  Community
+} from '../index';
 
 declare var Object: any;
 export interface DebtInterface {
@@ -7,7 +10,13 @@ export interface DebtInterface {
   "dissolved"?: boolean;
   "amount"?: string;
   "createdAt"?: Date;
+  "communityType"?: string;
+  "basis"?: string;
+  "type"?: string;
+  "value"?: string;
   "id"?: number;
+  "communityId"?: number;
+  community?: Community;
 }
 
 export class Debt implements DebtInterface {
@@ -16,7 +25,13 @@ export class Debt implements DebtInterface {
   "dissolved": boolean;
   "amount": string;
   "createdAt": Date;
+  "communityType": string;
+  "basis": string;
+  "type": string;
+  "value": string;
   "id": number;
+  "communityId": number;
+  community: Community;
   constructor(data?: DebtInterface) {
     Object.assign(this, data);
   }
@@ -70,12 +85,40 @@ export class Debt implements DebtInterface {
           name: 'createdAt',
           type: 'Date'
         },
+        "communityType": {
+          name: 'communityType',
+          type: 'string'
+        },
+        "basis": {
+          name: 'basis',
+          type: 'string'
+        },
+        "type": {
+          name: 'type',
+          type: 'string'
+        },
+        "value": {
+          name: 'value',
+          type: 'string'
+        },
         "id": {
           name: 'id',
           type: 'number'
         },
+        "communityId": {
+          name: 'communityId',
+          type: 'number'
+        },
       },
       relations: {
+        community: {
+          name: 'community',
+          type: 'Community',
+          model: 'Community',
+          relationType: 'belongsTo',
+                  keyFrom: 'communityId',
+          keyTo: 'id'
+        },
       }
     }
   }

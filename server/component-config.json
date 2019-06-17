@@ -3,7 +3,13 @@
     "mountPath": "/explorer",
     "generateOperationScopedModels": true
   },
-  "./soap/agirhe-soap-service": {
-    "path": "/agirhe"
+  "./soap/service/community": {
+    "path": "/communities/retrieve"
+  },
+  "./soap/service/debt": {
+    "path": "/debts/retrieve"
+  },
+  "./soap/service/payment": {
+    "path": "/payments/retrieve"
   }
 }

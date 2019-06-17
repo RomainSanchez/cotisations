@@ -1,5 +1,6 @@
 /* tslint:disable */
 import {
+  Community,
   Import
 } from '../index';
 
@@ -12,7 +13,9 @@ export interface PaymentInterface {
   "valueDate"?: string;
   "createdAt"?: Date;
   "id"?: number;
+  "communityId"?: number;
   "importId"?: number;
+  community?: Community;
   import?: Import;
 }
 
@@ -24,7 +27,9 @@ export class Payment implements PaymentInterface {
   "valueDate": string;
   "createdAt": Date;
   "id": number;
+  "communityId": number;
   "importId": number;
+  community: Community;
   import: Import;
   constructor(data?: PaymentInterface) {
     Object.assign(this, data);
@@ -87,12 +92,24 @@ export class Payment implements PaymentInterface {
           name: 'id',
           type: 'number'
         },
+        "communityId": {
+          name: 'communityId',
+          type: 'number'
+        },
         "importId": {
           name: 'importId',
           type: 'number'
         },
       },
       relations: {
+        community: {
+          name: 'community',
+          type: 'Community',
+          model: 'Community',
+          relationType: 'belongsTo',
+                  keyFrom: 'communityId',
+          keyTo: 'id'
+        },
         import: {
           name: 'import',
           type: 'Import',

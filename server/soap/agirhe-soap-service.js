@@ -8,7 +8,7 @@ const communityParser = require('./parser/community-parser');
 module.exports = function(app, options) {
     app.use(options.path, async function(req, res, next) {
         res.send(await importAgirheData(app));
-  });
+    });
 };
 
 async function importAgirheData (app) {

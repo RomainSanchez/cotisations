@@ -16,8 +16,7 @@
       "required": true
     },
     "debit": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "credit": {
       "type": "string"
