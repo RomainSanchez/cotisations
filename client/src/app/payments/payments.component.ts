@@ -42,7 +42,13 @@ export class PaymentsComponent implements OnInit {
   }
 
   private getPayments() {
-    this.paymentApi.find().subscribe((payments: Payment[]) => {
+    this.paymentApi.find({
+      where: {
+        credit: {
+          neq: ''
+        }
+      }
+    }).subscribe((payments: Payment[]) => {
       this.payments = payments;
       this.tableDataSource.data = this.payments;
     });
