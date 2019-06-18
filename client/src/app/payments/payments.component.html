@@ -18,19 +18,19 @@
 
     <ng-container matColumnDef="label">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Libellé</mat-header-cell>
-        <mat-cell class="description-cell"
+        <mat-cell class="label-cell"
                   *matCellDef="let payment">{{payment.label}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="credit">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Crédit</mat-header-cell>
-      <mat-cell class="description-cell"
+      <mat-cell class="credit-cell"
                 *matCellDef="let payment">{{payment.credit}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="debit">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Débit</mat-header-cell>
-        <mat-cell class="duration-cell"
+        <mat-cell class="debit-cell"
                   *matCellDef="let payment">{{payment.debit}}</mat-cell>
     </ng-container>
 
@@ -48,7 +48,7 @@
     <mat-row
       *matRowDef="let payment; columns: displayedColumns"
       (click)=rowClicked(payment)
-      [ngClass]="{'error': isLabelValid(payment.label)}"
+      [ngClass]="isLabelValid(payment.label) ? '' : 'error'"
     ></mat-row>
 
 </mat-table>
