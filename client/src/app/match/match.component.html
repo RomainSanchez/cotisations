@@ -1,12 +1,18 @@
 <div id="match">
-
-  <div id="debts" class="column">
-    <app-debts></app-debts>
-  </div>
-
-  <div id="payments" class="column">
-    <app-payments></app-payments>
-  </div>
+  <as-split unit="percent" [direction]="horizontal" #split="asSplit" gutterSize="20" >
+    <as-split-area size="50" #debtPanel="asSplitArea">
+      <h2 class="mat-display-1">Déclarations</h2>
+        <div id="debts" class="column">
+            <app-debts (selectedDebt)="selectedDebt($event)"></app-debts>
+          </div>
+    </as-split-area>
+    <as-split-area size="50" #paymentPanel="asSplitArea">
+      <h2 class="mat-display-1">Virements</h2>
+        <div id="payments" class="column">
+            <app-payments (selectedPayment)="selectedPayment($event)"></app-payments>
+          </div>
+    </as-split-area>
+  </as-split>
 
 </div>
 

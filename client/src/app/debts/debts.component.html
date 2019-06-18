@@ -1,6 +1,6 @@
 <div>
     <mat-form-field>
-      <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+      <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
     </mat-form-field>
 </div>
 
@@ -11,9 +11,9 @@
         <mat-cell *matCellDef="let debt">{{debt.date}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="value">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Date de valeur</mat-header-cell>
-      <mat-cell *matCellDef="let debt">{{debt.value}}</mat-cell>
+    <ng-container matColumnDef="community">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Collectivité</mat-header-cell>
+        <mat-cell *matCellDef="let debt">{{debt.community.label}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="amount">
@@ -47,7 +47,7 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-    <mat-row *matRowDef="let row; columns: displayedColumns" (click)=rowClicked(row)></mat-row>
+    <mat-row *matRowDef="let debt; columns: displayedColumns" (click)=rowClicked(debt)></mat-row>
 
 </mat-table>
 

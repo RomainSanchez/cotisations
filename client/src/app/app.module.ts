@@ -9,6 +9,7 @@ import { SDKBrowserModule } from 'src/app/shared/sdk/index';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { AngularSplitModule } from 'angular-split';
 import { MaterialComponentsModule } from './material-components/material-components.module';
 import { MatchComponent } from './match/match.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -33,7 +34,8 @@ import { CsvUploadComponent } from './csv-upload/csv-upload.component';
     ReactiveFormsModule,
     HttpClientModule,
     SDKBrowserModule.forRoot(),
-    MaterialComponentsModule
+    MaterialComponentsModule,
+    AngularSplitModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

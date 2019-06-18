@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Debt } from '../shared/sdk/models/index';
 import { DebtApi } from '../shared/sdk/services/index';
@@ -9,12 +9,14 @@ import { DebtApi } from '../shared/sdk/services/index';
   styleUrls: ['./debts.component.sass']
 })
 export class DebtsComponent implements OnInit {
+  @Output() selectedDebt = new EventEmitter<any>();
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   private displayedColumns: any = [
     'date',
-    'value',
+    'community',
     'basis',
     'type',
     'amount',
@@ -40,7 +42,10 @@ export class DebtsComponent implements OnInit {
   }
 
   private getDebts() {
-    this.debtApi.find({limit: 100}).subscribe((debts: Debt[]) => {
+    this.debtApi.find({
+      limit: 100,
+      include: { relation: "community" }
+    }).subscribe((debts: Debt[]) => {
       this.debts = debts;
       this.tableDataSource.data = this.debts;
     });
@@ -50,8 +55,8 @@ export class DebtsComponent implements OnInit {
     this.tableDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  private rowClicked(row) {
-    console.log(`aaa: ${row}`);
+  public rowClicked(debt: Debt) {
+    this.selectedDebt.emit(debt);
   }
 
 }
