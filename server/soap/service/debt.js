@@ -47,10 +47,6 @@ const getCommunityId = async (agirheCode) => {
     }
 
     const community = await communityModel.findOne({
-        //fields: {
-          //  'id': true,
-          //  'agirheCode': true
-        //},
         where: {
             'agirheCode': agirheCode
         }
