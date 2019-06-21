@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/
 import { SplitComponent, SplitAreaDirective } from 'angular-split';
 
 import { Debt, Payment } from '../shared/sdk';
+import { PaymentsComponent } from '../payments/payments.component';
 
 @Component({
   selector: 'app-match',
@@ -13,22 +14,23 @@ export class MatchComponent implements OnInit {
   @ViewChild('split') split: SplitComponent;
   @ViewChild('debt-panel') debtPanel: SplitAreaDirective;
   @ViewChild('payment-panel') paymentPanel: SplitAreaDirective;
-  private debt: Debt;
-  private payments: Payment[] = [];
+  @ViewChild('paymentsComponent') paymentsComponent: PaymentsComponent;
+  debt: Debt;
+  payments: Payment[] = [];
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  selectedDebt (debt: Debt) {
+  debtSelected (debt: Debt) {
+    this.paymentsComponent.resetSelectedPayments();
+
     this.debt = debt;
-    console.log(this.debt);
   }
 
-  selectedPayment (payment: Payment) {
-    this.payments.push(payment);
-    console.log(this.payments);
+  paymentSelected (payments: Payment[]) {
+    this.payments = payments;
   }
 
 }

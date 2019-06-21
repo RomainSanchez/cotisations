@@ -41,20 +41,15 @@
                   *matCellDef="let payment">{{payment.debit}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="select">
-        <mat-header-cell *matHeaderCellDef>Sélectionner</mat-header-cell>
-        <mat-cell *matCellDef="let payment">
-          <button mat-icon-button color="accent" (click)="selectPayment(payment.id)">
-              <mat-icon class="mat-18">check_circle</mat-icon>
-          </button>
-        </mat-cell>
-    </ng-container>
-
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
     <mat-row
       *matRowDef="let payment; columns: displayedColumns"
       (click)=rowClicked(payment)
+      [ngClass]="{
+        'selected': isPaymentSelected(payment) !== -1,
+        'error': !isLabelValid(payment.label)
+      }"
       [ngClass]="isLabelValid(payment.label) ? '' : 'error'"
     ></mat-row>
 

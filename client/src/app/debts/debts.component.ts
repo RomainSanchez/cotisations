@@ -12,7 +12,7 @@ import { DebtApi } from '../shared/sdk/services/index';
   styleUrls: ['./debts.component.sass']
 })
 export class DebtsComponent implements OnInit {
-  @Output() selectedDebt = new EventEmitter<any>();
+  @Output() matchDebt = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -22,14 +22,14 @@ export class DebtsComponent implements OnInit {
     'community',
     'basis',
     'type',
-    'amount',
-    'select'
+    'amount'
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
 
   tableDataSource: MatTableDataSource<Debt>;
-  private debts: Debt[];
+  debts: Debt[];
+  selectedDebt: Debt;
   isLoading = false;
 
   constructor(
@@ -75,7 +75,21 @@ export class DebtsComponent implements OnInit {
   }
 
   rowClicked(debt: Debt) {
-    this.selectedDebt.emit(debt);
+    if(this.isDebtSelected(debt)) {
+      this.selectedDebt = null;
+
+      this.matchDebt.emit(this.selectedDebt);
+
+      return;
+    }
+
+    this.selectedDebt = debt;
+
+    this.matchDebt.emit(this.selectedDebt);
+  }
+
+  isDebtSelected(debt: Debt): boolean {
+    return this.selectedDebt && this.selectedDebt.id === debt.id;
   }
 
 }

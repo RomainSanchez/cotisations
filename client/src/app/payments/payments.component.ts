@@ -9,7 +9,7 @@ import { PaymentApi } from '../shared/sdk/services/index';
   styleUrls: ['./payments.component.sass']
 })
 export class PaymentsComponent implements OnInit {
-  @Output() selectedPayment= new EventEmitter<any>();
+  @Output() matchPayments = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -19,14 +19,14 @@ export class PaymentsComponent implements OnInit {
     'value',
     'label',
     'debit',
-    'credit',
-    'select'
+    'credit'
   ];
   private pageSize = 10;
   private pageSizeOptions = [5, 10, 20, 50, 100];
 
   private tableDataSource: MatTableDataSource<Payment>;
   private payments: Payment[];
+  private selectedPayments: Payment[] = [];
 
   isLoading = false;
 
@@ -65,10 +65,22 @@ export class PaymentsComponent implements OnInit {
   }
 
   public rowClicked(payment: Payment) {
-    this.selectedPayment.emit(payment);
+    let key:number = this.isPaymentSelected(payment);
+
+    if(key !== -1 ) {
+      delete this.selectedPayments[key];
+
+      this.selectedPayments = this.selectedPayments.filter((thePayment) => {
+        return thePayment !== null;
+      });
+    } else {
+      this.selectedPayments.push(payment);
+    }
+
+    this.matchPayments.emit(this.selectedPayments);
   }
 
-  public isLabelValid (label: string) {
+  public isLabelValid (label: string): any {
     const regularExpressions = [
       new RegExp('COTIS_\\d{4}_\\d{2}_d{14}', 'i'),
       new RegExp('COTIS\\s\\d{4}\\s\\d{2}\\s\\d{14}', 'i')
@@ -80,6 +92,24 @@ export class PaymentsComponent implements OnInit {
 
   public uploadDone() {
     this.getPayments();
+  }
+
+  public isPaymentSelected(payment: Payment): number {
+    let key: number = -1;
+
+    this.selectedPayments.forEach((thePayment, theKey) => {
+      if(thePayment.id === payment.id) {
+        key = theKey;
+      }
+    });
+
+    return key;
+  }
+
+  public resetSelectedPayments() {
+    this.selectedPayments = [];
+
+    this.matchPayments.emit(this.selectedPayments);
   }
 
 }
