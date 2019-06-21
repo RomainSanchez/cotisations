@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AngularSplitModule } from 'angular-split';
-import { MaterialComponentsModule } from './material-components/material-components.module';
+import { MaterialComponentsModule } from '../material-components/material-components.module';
 import { MatchComponent } from './match/match.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DebtsComponent } from './debts/debts.component';
