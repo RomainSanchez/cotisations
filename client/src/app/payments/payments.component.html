@@ -2,7 +2,14 @@
   <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
 </mat-form-field>
 
-<app-csv-upload></app-csv-upload>
+<app-csv-upload (uploadDone)="uploadDone($event)"></app-csv-upload>
+
+<div *ngIf="isLoading" class="spinner-wrapper">
+  <mat-progress-spinner class="spinner"
+    color="primary"
+    mode="indeterminate">
+  </mat-progress-spinner>
+</div>
 
 <mat-table class="payments-table mat-elevation-z4" matSort [dataSource]="tableDataSource">
 

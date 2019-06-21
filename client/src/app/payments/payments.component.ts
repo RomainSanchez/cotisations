@@ -28,6 +28,8 @@ export class PaymentsComponent implements OnInit {
   private tableDataSource: MatTableDataSource<Payment>;
   private payments: Payment[];
 
+  isLoading = false;
+
   constructor(private paymentApi: PaymentApi) {
     this.tableDataSource = new MatTableDataSource<Payment>();
   }
@@ -42,6 +44,8 @@ export class PaymentsComponent implements OnInit {
   }
 
   private getPayments() {
+    this.isLoading = true;
+
     this.paymentApi.find({
       where: {
         credit: {
@@ -51,6 +55,8 @@ export class PaymentsComponent implements OnInit {
     }).subscribe((payments: Payment[]) => {
       this.payments = payments;
       this.tableDataSource.data = this.payments;
+
+      this.isLoading = false;
     });
   }
 
@@ -70,6 +76,10 @@ export class PaymentsComponent implements OnInit {
 
     return (label && label !== ' ' && label !== 'Libellé') &&
       (label.match(regularExpressions[0]) || label.match(regularExpressions[1]));
+  }
+
+  public uploadDone() {
+    this.getPayments();
   }
 
 }

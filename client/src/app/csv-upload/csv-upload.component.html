@@ -1,5 +1,5 @@
 <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="upload($event.target.files[0])" accept=".csv"/>
-<button mat-flat-button color="primary" (click)="csvInput.click()">
+<button mat-flat-button color="accent" (click)="csvInput.click()">
   <mat-icon class="mat-18">arrow_upward</mat-icon>
   Importer fichier DFIP
 </button>
