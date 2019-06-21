@@ -1,6 +1,6 @@
 'use strict';
 
-const csvToJson=require("csvtojson");
+const csvToJson = require("csvtojson");
 
 module.exports = function(Payment) {
     Payment.fromCsv = async (data, callback) => {

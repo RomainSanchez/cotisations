@@ -8,8 +8,5 @@
   },
   "./soap/service/debt": {
     "path": "/debts/retrieve"
-  },
-  "./soap/service/payment": {
-    "path": "/payments/retrieve"
   }
 }
