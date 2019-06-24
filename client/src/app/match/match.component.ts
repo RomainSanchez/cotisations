@@ -15,22 +15,48 @@ export class MatchComponent implements OnInit {
   @ViewChild('debt-panel') debtPanel: SplitAreaDirective;
   @ViewChild('payment-panel') paymentPanel: SplitAreaDirective;
   @ViewChild('paymentsComponent') paymentsComponent: PaymentsComponent;
-  debt: Debt;
+  debts: Debt[] = [];
   payments: Payment[] = [];
+  balance: number;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  debtSelected (debt: Debt) {
-    this.paymentsComponent.resetSelectedPayments();
+  debtSelected (debts: Debt[]) {
+    this.debts = debts;
 
-    this.debt = debt;
+    if(this.debts.length === 0) {
+      this.paymentsComponent.resetSelectedPayments();
+    }
+
+    this.computeTotal();
   }
 
   paymentSelected (payments: Payment[]) {
     this.payments = payments;
+
+    this.computeTotal();
+  }
+
+  match() {
+    console.log(this.debts, this.payments);
+  }
+
+  computeTotal() {
+    let debtTotal: number = 0;
+    let paymentTotal: number = 0;
+
+    this.debts.forEach(debt => {
+      debtTotal += parseFloat(debt.amount);
+    });
+
+    this.payments.forEach(payment => {
+      paymentTotal += parseFloat(payment.credit);
+    });
+
+    this.balance = debtTotal - paymentTotal;
   }
 
 }

@@ -3,16 +3,37 @@
   flex-direction: column
   align-items: center
 
+  .flex-columns
+    display: flex
+    align-items: center
+    justify-content: space-around
+
   mat-card#matches
     margin-top: 30px
     margin-bottom: 30px
+    position: fixed
+    z-index: 999
+    margin-top: 14px
+    top: 0
+
+    .payment-label
+      width: 400px;
 
     div.right
       display: flex
       flex-direction: column
 
     li
-      list-style-type: none;
+      list-style-type: none
+
+    span.total
+      color: #3f51b5
+      margin-left: 5px
+      font-size: 2em
+
+    #validate
+      font-size: 3.5em;
+      cursor: pointer;
 
   #lists
     display: flex

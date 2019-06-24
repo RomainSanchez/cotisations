@@ -1,14 +1,13 @@
 <div id="match">
   <mat-card id="matches">
-    <p class="no-debt" *ngIf="!debt">Aucune déclaration sélectionnée</p>
-    <ng-container *ngIf="debt">
-      <mat-card-header>
+    <p class="no-debt" *ngIf="debts.length === 0">Aucune déclaration sélectionnée</p>
+    <ng-container *ngIf="debts.length > 0">
+      <mat-card-header *ngFor="let debt of debts">
         <mat-icon mat-card-avatar class="mat-18" color="primary">remove</mat-icon>
         <mat-card-title>{{ debt.community.label }}</mat-card-title>
         <mat-card-subtitle>{{ debt.type }} {{ debt.basis }}</mat-card-subtitle>
         <mat-card-subtitle>{{ debt.date }}</mat-card-subtitle>
         <mat-card-title>{{ debt.amount }} €</mat-card-title>
-        <mat-icon class="mat-18" color="accent">check_circle</mat-icon>
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
@@ -17,9 +16,27 @@
           <mat-icon class="mat-18" color="primary">add</mat-icon>
           <ul id="selected-payments">
             <li *ngFor="let payment of payments">
-              <span>{{ payment.label}} {{ payment.amount }}</span>
+              <div class="flex-columns">
+                  <span class="payment-label">{{ payment.label}}</span>
+                  <span>{{ payment.credit | number: '1.2-2' }}</span>
+              </div>
             </li>
           </ul>
+        </div>
+      </mat-card-content>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <div class="flex-columns">
+          <div class="total">
+              <span class="mat-18" color="primary">=</span>
+              <p id="total">{{ balance | number: '1.2-2' }} €</p>
+          </div>
+          <mat-icon mat-button id="validate" class="mat-18" color="accent"
+            *ngIf="payments.length > 0"
+            (click)="match()"
+            mat-tooltip="Valider le rapprochement"
+            tooltip-position="below"
+          >check_circle</mat-icon>
         </div>
       </mat-card-content>
     </ng-container>
@@ -30,7 +47,7 @@
         <as-split-area size="50" #debtPanel="asSplitArea">
           <h2 class="mat-display-1">Déclarations</h2>
             <div id="debts" class="column">
-                <app-debts (matchDebt)="debtSelected($event)"></app-debts>
+                <app-debts (matchDebts)="debtSelected($event)"></app-debts>
               </div>
         </as-split-area>
         <as-split-area size="50" #paymentPanel="asSplitArea">

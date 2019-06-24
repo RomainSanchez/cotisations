@@ -49,7 +49,7 @@
 
     <mat-row *matRowDef="let debt; columns: displayedColumns"
       (click)=rowClicked(debt)
-      [ngClass]="{'selected': isDebtSelected(debt)}"
+      [ngClass]="{'selected': isDebtSelected(debt) !== -1}"
     ></mat-row>
 
 </mat-table>

@@ -12,7 +12,7 @@ import { DebtApi } from '../shared/sdk/services/index';
   styleUrls: ['./debts.component.sass']
 })
 export class DebtsComponent implements OnInit {
-  @Output() matchDebt = new EventEmitter<any>();
+  @Output() matchDebts = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -28,8 +28,8 @@ export class DebtsComponent implements OnInit {
   pageSizeOptions = [5, 10, 20, 50, 100];
 
   tableDataSource: MatTableDataSource<Debt>;
-  debts: Debt[];
-  selectedDebt: Debt;
+  debts: Debt[] = [];
+  selectedDebts: Debt[] = [];
   isLoading = false;
 
   constructor(
@@ -75,21 +75,31 @@ export class DebtsComponent implements OnInit {
   }
 
   rowClicked(debt: Debt) {
-    if(this.isDebtSelected(debt)) {
-      this.selectedDebt = null;
+    let key: number = this.isDebtSelected(debt);
 
-      this.matchDebt.emit(this.selectedDebt);
+    if(key !== -1 ) {
+      delete this.selectedDebts[key];
 
-      return;
+      this.selectedDebts = this.selectedDebts.filter((theDebt) => {
+        return theDebt !== null;
+      });
+    } else {
+      this.selectedDebts.push(debt);
     }
 
-    this.selectedDebt = debt;
-
-    this.matchDebt.emit(this.selectedDebt);
+    this.matchDebts.emit(this.selectedDebts);
   }
 
-  isDebtSelected(debt: Debt): boolean {
-    return this.selectedDebt && this.selectedDebt.id === debt.id;
+  isDebtSelected(debt: Debt): number {
+    let key: number = -1;
+
+    this.selectedDebts.forEach((theDebt, theKey) => {
+      if(theDebt.id === debt.id) {
+        key = theKey;
+      }
+    });
+
+    return key;
   }
 
 }
