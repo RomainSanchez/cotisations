@@ -13,8 +13,8 @@ module.exports = function(Payment) {
             payments.push({
                 date: row.Date,
                 valueDate: row.Valeur,
-                debit: row.Débit,
-                credit: row.Crédit,
+                debit: row.Débit.replace(' ', '').replace(',', '.'),
+                credit: row.Crédit.replace(' ', '').replace(',', '.'),
                 label: row.Libellé
             });
         });
