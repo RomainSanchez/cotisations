@@ -1,0 +1,40 @@
+<h2 class="mat-display-1">Collectivités</h2>
+
+<div *ngIf="isLoading" class="spinner-wrapper">
+  <mat-progress-spinner class="spinner"
+    color="primary"
+    mode="indeterminate"
+    diameter="150"
+  ></mat-progress-spinner>
+</div>
+
+<mat-form-field>
+  <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
+</mat-form-field>
+
+<button mat-flat-button color="accent" (click)="updateCommunities()">
+    <mat-icon class="mat-18">update</mat-icon>
+    Rafraichir les données depuis Agirhe
+</button>
+
+<mat-table class="communities-table mat-elevation-z4" matSort [dataSource]="tableDataSource">
+    <ng-container matColumnDef="agirheCode">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Code Agirhe</mat-header-cell>
+        <mat-cell *matCellDef="let community">{{ community.agirheCode }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="label">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
+      <mat-cell *matCellDef="let community">{{ community.label }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let community; columns: displayedColumns"
+      (click)=rowClicked(community)
+    ></mat-row>
+
+</mat-table>
+
+<mat-paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+

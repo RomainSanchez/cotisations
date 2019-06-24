@@ -16,6 +16,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DebtsComponent } from './debts/debts.component';
 import { PaymentsComponent } from './payments/payments.component';
 import { CsvUploadComponent } from './csv-upload/csv-upload.component';
+import { CommunitiesComponent } from './communities/communities.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CsvUploadComponent } from './csv-upload/csv-upload.component';
     DashboardComponent,
     DebtsComponent,
     PaymentsComponent,
-    CsvUploadComponent
+    CsvUploadComponent,
+    CommunitiesComponent
   ],
   imports: [
     AppRoutingModule,
