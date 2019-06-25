@@ -2,7 +2,10 @@
   <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
 </mat-form-field>
 
-<app-csv-upload (uploadDone)="uploadDone($event)"></app-csv-upload>
+<app-csv-upload
+  (uploadStarted)="uploadStarted($event)"
+  (uploadDone)="uploadDone($event)"
+></app-csv-upload>
 
 <div *ngIf="isLoading" class="spinner-wrapper">
   <mat-progress-spinner class="spinner"

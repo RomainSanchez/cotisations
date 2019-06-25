@@ -8,11 +8,14 @@ import { HttpHeaders } from '@angular/common/http';
   styleUrls: ['./csv-upload.component.sass']
 })
 export class CsvUploadComponent {
+  @Output() uploadStarted = new EventEmitter<any>();
   @Output() uploadDone = new EventEmitter<any>();
 
   constructor(private paymentApi: PaymentApi) {}
 
   upload(file: any) {
+    this.uploadStarted.emit(true);
+
     const reader: FileReader = new FileReader();
 
     reader.readAsText(file);
@@ -25,7 +28,7 @@ export class CsvUploadComponent {
           this.uploadDone.emit(true);
         },
         error => {
-          this.uploadDone.emit(true);
+          this.uploadDone.emit(false);
         }
       );
     }

@@ -90,8 +90,18 @@ export class PaymentsComponent implements OnInit {
       (label.match(regularExpressions[0]) || label.match(regularExpressions[1]));
   }
 
-  public uploadDone() {
-    this.getPayments();
+  public uploadStarted() {
+    this.isLoading = true;
+  }
+
+  public uploadDone(success: boolean) {
+    if(success) {
+      this.getPayments();
+
+      return;
+    }
+
+    this.isLoading = false;
   }
 
   public isPaymentSelected(payment: Payment): number {
