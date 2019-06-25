@@ -21,7 +21,15 @@ async function importCommunities (app) {
 
     communities = communityParser.parse(communities);
 
-    await app.models.Community.create(communities);
+    for (const community of communities) {
+        const existing = await app.models.Community.findOne({where: {'agirheCode': community.agirheCode}});
+
+        if(existing) {
+            community.id = existing.id;
+        }
+
+        await app.models.Community.updateOrCreate(community);
+    }
 
     return communities;
 };
