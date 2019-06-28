@@ -1,6 +1,7 @@
 /* tslint:disable */
 import {
-  Community
+  Community,
+  Payment
 } from '../index';
 
 declare var Object: any;
@@ -17,6 +18,7 @@ export interface DebtInterface {
   "id"?: number;
   "communityId"?: number;
   community?: Community;
+  payments?: Payment[];
 }
 
 export class Debt implements DebtInterface {
@@ -32,6 +34,7 @@ export class Debt implements DebtInterface {
   "id": number;
   "communityId": number;
   community: Community;
+  payments: Payment[];
   constructor(data?: DebtInterface) {
     Object.assign(this, data);
   }
@@ -118,6 +121,16 @@ export class Debt implements DebtInterface {
           relationType: 'belongsTo',
                   keyFrom: 'communityId',
           keyTo: 'id'
+        },
+        payments: {
+          name: 'payments',
+          type: 'Payment[]',
+          model: 'Payment',
+          relationType: 'hasMany',
+          modelThrough: 'Match',
+          keyThrough: 'paymentId',
+          keyFrom: 'id',
+          keyTo: 'debtId'
         },
       }
     }

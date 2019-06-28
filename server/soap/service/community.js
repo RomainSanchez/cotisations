@@ -1,7 +1,7 @@
 'use strict';
 
 const util = require('util');
-const SoapClient = require('../soap-client');
+const soapClient = require('../soap-client');
 const communityParser = require('../parser/community-parser');
 
 module.exports = function(app, options) {
@@ -12,7 +12,7 @@ module.exports = function(app, options) {
 
 async function importCommunities (app) {
     const config = app.get('app');
-    const client = await new SoapClient.client(config.soap.url).getInstance();
+    const client = await new soapClient.client(config.soap.url).getInstance();
     // Promisify callback based soap function
     const getCommunities = util.promisify(client.ListeCollectivite);
 
@@ -22,7 +22,10 @@ async function importCommunities (app) {
     communities = communityParser.parse(communities);
 
     for (const community of communities) {
-        const existing = await app.models.Community.findOne({where: {'agirheCode': community.agirheCode}});
+        const existing = await app.models.Community.findOne({where: {
+            'agirheCode': community.agirheCode,
+            'siret': community.siret
+        }});
 
         if(existing) {
             community.id = existing.id;

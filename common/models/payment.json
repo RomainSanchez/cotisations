@@ -27,6 +27,9 @@
     "createdAt": {
       "type": "date",
       "defaultFn": "now"
+    },
+    "disbursedAt": {
+      "type": "string"
     }
   },
   "validations": [],
@@ -39,10 +42,10 @@
         "nestRemoting": true
       }
     },
-    "community": {
-      "type": "belongsTo",
-      "model": "Community",
-      "foreignKey": "communityId",
+    "debts": {
+      "type": "hasAndBelongsToMany",
+      "model": "Debt",
+      "throughTable": "match",
       "options": {
         "nestRemoting": true
       }

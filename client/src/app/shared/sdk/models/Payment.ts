@@ -1,22 +1,22 @@
 /* tslint:disable */
 import {
-  Community,
-  Import
+  Import,
+  Debt
 } from '../index';
 
 declare var Object: any;
 export interface PaymentInterface {
   "date": string;
   "label": string;
-  "debit": string;
+  "debit"?: string;
   "credit"?: string;
   "valueDate"?: string;
   "createdAt"?: Date;
+  "disbursedAt"?: string;
   "id"?: number;
-  "communityId"?: number;
   "importId"?: number;
-  community?: Community;
   import?: Import;
+  debts?: Debt[];
 }
 
 export class Payment implements PaymentInterface {
@@ -26,11 +26,11 @@ export class Payment implements PaymentInterface {
   "credit": string;
   "valueDate": string;
   "createdAt": Date;
+  "disbursedAt": string;
   "id": number;
-  "communityId": number;
   "importId": number;
-  community: Community;
   import: Import;
+  debts: Debt[];
   constructor(data?: PaymentInterface) {
     Object.assign(this, data);
   }
@@ -88,12 +88,12 @@ export class Payment implements PaymentInterface {
           name: 'createdAt',
           type: 'Date'
         },
+        "disbursedAt": {
+          name: 'disbursedAt',
+          type: 'string'
+        },
         "id": {
           name: 'id',
-          type: 'number'
-        },
-        "communityId": {
-          name: 'communityId',
           type: 'number'
         },
         "importId": {
@@ -102,14 +102,6 @@ export class Payment implements PaymentInterface {
         },
       },
       relations: {
-        community: {
-          name: 'community',
-          type: 'Community',
-          model: 'Community',
-          relationType: 'belongsTo',
-                  keyFrom: 'communityId',
-          keyTo: 'id'
-        },
         import: {
           name: 'import',
           type: 'Import',
@@ -117,6 +109,16 @@ export class Payment implements PaymentInterface {
           relationType: 'belongsTo',
                   keyFrom: 'importId',
           keyTo: 'id'
+        },
+        debts: {
+          name: 'debts',
+          type: 'Debt[]',
+          model: 'Debt',
+          relationType: 'hasMany',
+          modelThrough: 'Match',
+          keyThrough: 'debtId',
+          keyFrom: 'id',
+          keyTo: 'paymentId'
         },
       }
     }

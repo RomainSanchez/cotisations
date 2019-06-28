@@ -44,6 +44,14 @@
       "options": {
         "nestRemoting": true
       }
+    },
+    "payments": {
+      "type": "hasAndBelongsToMany",
+      "model": "Payment",
+      "throughTable": "match",
+      "options": {
+        "nestRemoting": true
+      }
     }
   },
   "acls": [],
