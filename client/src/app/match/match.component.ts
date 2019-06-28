@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { SplitComponent, SplitAreaDirective } from 'angular-split';
+import { MatTableDataSource, MatSort } from '@angular/material';
 
 import { Debt, Payment } from '../shared/sdk';
 import { PaymentsComponent } from '../payments/payments.component';
@@ -12,30 +13,54 @@ import { PaymentsComponent } from '../payments/payments.component';
 })
 export class MatchComponent implements OnInit {
   @ViewChild('split') split: SplitComponent;
-  @ViewChild('debt-panel') debtPanel: SplitAreaDirective;
-  @ViewChild('payment-panel') paymentPanel: SplitAreaDirective;
-  @ViewChild('paymentsComponent') paymentsComponent: PaymentsComponent;
+  @ViewChild('debtPanel') debtPanel: SplitAreaDirective;
+  @ViewChild('paymentPanel') paymentPanel: SplitAreaDirective;
+  @ViewChild(MatSort) debtSort: MatSort;
+  @ViewChild(MatSort) paymentSort: MatSort;
   debts: Debt[] = [];
   payments: Payment[] = [];
   balance: number;
+  debtColumns: string[] = [
+    'date',
+    'community',
+    'basis',
+    'type',
+    'amount'
+  ];
+  paymentColumns: string[] = [
+    'date',
+    'value',
+    'label',
+    'credit'
+  ];
+  debtDataSource: MatTableDataSource<Debt>;
+  paymentDataSource: MatTableDataSource<Payment>;
 
-  constructor() { }
+  constructor() {
+    this.debtDataSource = new MatTableDataSource<Debt>();
+    this.paymentDataSource = new MatTableDataSource<Payment>();
+  }
 
   ngOnInit() {
+    this.debtDataSource.data = this.debts;
+    this.debtDataSource.sort = this.debtSort;
+    this.paymentDataSource.sort = this.paymentSort;
+  }
+
+  ngAfterViewInit() {
+
   }
 
   debtSelected (debts: Debt[]) {
     this.debts = debts;
-
-    if(this.debts.length === 0) {
-      this.paymentsComponent.resetSelectedPayments();
-    }
+    this.debtDataSource.data = this.debts;
 
     this.computeTotal();
   }
 
   paymentSelected (payments: Payment[]) {
     this.payments = payments;
+    this.paymentDataSource.data = this.payments;
 
     this.computeTotal();
   }

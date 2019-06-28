@@ -1,45 +1,81 @@
 <div id="match">
-  <mat-card id="matches">
-    <p class="no-debt" *ngIf="debts.length === 0">Aucune déclaration sélectionnée</p>
-    <ng-container *ngIf="debts.length > 0">
-      <mat-card-header *ngFor="let debt of debts">
-        <mat-icon mat-card-avatar class="mat-18" color="primary">remove</mat-icon>
-        <mat-card-title>{{ debt.community.label }}</mat-card-title>
-        <mat-card-subtitle>{{ debt.type }} {{ debt.basis }}</mat-card-subtitle>
-        <mat-card-subtitle>{{ debt.date }}</mat-card-subtitle>
-        <mat-card-title>{{ debt.amount }} €</mat-card-title>
-      </mat-card-header>
+  <mat-card id="matches" ngDraggable *ngIf="debts.length > 0 || payments.length > 0">
+      <mat-card-title>Rapprochement</mat-card-title>
       <mat-divider></mat-divider>
-      <mat-card-content>
+
+      <mat-card-content id="selected-debts">
+        <p *ngIf="debts.length == 0">Aucune déclaration sélectionnée</p>
+        <mat-table *ngIf="debts.length > 0" class="match-debts-table" matSort [dataSource]="debtDataSource">
+            <ng-container matColumnDef="date">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Date d'encaissement</mat-header-cell>
+                <mat-cell *matCellDef="let debt">{{debt.date}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="community">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Collectivité</mat-header-cell>
+                <mat-cell *matCellDef="let debt">{{debt.community.label}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Montant</mat-header-cell>
+                <mat-cell *matCellDef="let debt">{{debt.amount}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+              <mat-cell *matCellDef="let debt">{{debt.type}}</mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="basis">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Assiette</mat-header-cell>
+                <mat-cell *matCellDef="let debt">{{debt.basis}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="debtColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let debt; columns: debtColumns"
+            ></mat-row>
+
+        </mat-table>
+      </mat-card-content>
+      <mat-divider></mat-divider>
+
+      <mat-card-content id="selected-payments">
         <p *ngIf="payments.length == 0">Aucun virement sélectionné</p>
-        <div *ngIf="payments.length > 0">
-          <mat-icon class="mat-18" color="primary">add</mat-icon>
-          <ul id="selected-payments">
-            <li *ngFor="let payment of payments">
-              <div class="flex-columns">
-                  <span class="payment-label">{{ payment.label}}</span>
-                  <span>{{ payment.credit | number: '1.2-2' }}</span>
-              </div>
-            </li>
-          </ul>
-        </div>
+        <mat-table *ngIf="payments.length > 0" class="match-payments-table" matSort  [dataSource]="paymentDataSource">
+          <ng-container matColumnDef="date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Date d'encaissement</mat-header-cell>
+              <mat-cell *matCellDef="let payment">{{payment.date}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="value">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Date de valeur</mat-header-cell>
+              <mat-cell *matCellDef="let payment">{{payment.valueDate}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="label">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Libellé</mat-header-cell>
+              <mat-cell *matCellDef="let payment">{{payment.label}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="credit">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Montant</mat-header-cell>
+            <mat-cell *matCellDef="let payment">{{payment.credit}}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="paymentColumns"></mat-header-row>
+
+          <mat-row *matRowDef="let payment; columns: paymentColumns"
+          ></mat-row>
+
+        </mat-table>
       </mat-card-content>
       <mat-divider></mat-divider>
-      <mat-card-content>
-        <div class="flex-columns">
-          <div class="total">
-              <span class="mat-18" color="primary">=</span>
-              <p id="total">{{ balance | number: '1.2-2' }} €</p>
-          </div>
-          <mat-icon mat-button id="validate" class="mat-18" color="accent"
-            *ngIf="payments.length > 0"
-            (click)="match()"
-            mat-tooltip="Valider le rapprochement"
-            tooltip-position="below"
-          >check_circle</mat-icon>
-        </div>
+
+      <mat-card-content id="balance">
+        {{ balance }}
       </mat-card-content>
-    </ng-container>
   </mat-card>
 
   <div id="lists">
@@ -60,5 +96,4 @@
   </div>
 
 </div>
-
 
