@@ -23,6 +23,11 @@
         <mat-cell *matCellDef="let community">{{ community.agirheCode }}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="siret">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Siret</mat-header-cell>
+      <mat-cell *matCellDef="let community">{{ community.siret| siret }}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="label">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
       <mat-cell *matCellDef="let community">{{ community.label }}</mat-cell>

@@ -18,6 +18,7 @@ import { DebtsComponent } from './debts/debts.component';
 import { PaymentsComponent } from './payments/payments.component';
 import { CsvUploadComponent } from './csv-upload/csv-upload.component';
 import { CommunitiesComponent } from './communities/communities.component';
+import { Siret } from './communities/siret.pipe';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { CommunitiesComponent } from './communities/communities.component';
     DebtsComponent,
     PaymentsComponent,
     CsvUploadComponent,
-    CommunitiesComponent
+    CommunitiesComponent,
+    Siret
   ],
   imports: [
     AppRoutingModule,

@@ -17,6 +17,7 @@ export class CommunitiesComponent implements OnInit {
 
   displayedColumns = [
     'agirheCode',
+    'siret',
     'label'
   ];
   pageSize = 10;
