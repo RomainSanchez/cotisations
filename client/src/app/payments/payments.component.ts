@@ -46,13 +46,7 @@ export class PaymentsComponent implements OnInit {
   private getPayments() {
     this.isLoading = true;
 
-    this.paymentApi.find({
-      where: {
-        credit: {
-          neq: ''
-        }
-      }
-    }).subscribe((payments: Payment[]) => {
+    this.paymentApi.getUnmatched().subscribe((payments: Payment[]) => {
       this.payments = payments;
       this.tableDataSource.data = this.payments;
 

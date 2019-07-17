@@ -51,10 +51,7 @@ export class DebtsComponent implements OnInit {
   getDebts() {
     this.isLoading = true;
 
-    this.debtApi.find({
-      limit: 100,
-      include: { relation: "community" }
-    }).subscribe((debts: Debt[]) => {
+    this.debtApi.getUnmatched().subscribe((debts: Debt[]) => {
       this.debts = debts;
       this.tableDataSource.data = this.debts;
 

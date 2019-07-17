@@ -74,7 +74,16 @@
       <mat-divider></mat-divider>
 
       <mat-card-content id="balance">
-        {{ balance }}
+          <div class="total">
+              <span class="mat-18" color="primary">=</span>
+              <p id="total">{{ balance | number: '1.2-2' }} €</p>
+          </div>
+          <mat-icon mat-button id="validate" class="mat-18" color="accent"
+            *ngIf="payments.length && debts.length"
+            (click)="match()"
+            mat-tooltip="Valider le rapprochement"
+            tooltip-position="below"
+          >check_circle</mat-icon>
       </mat-card-content>
   </mat-card>
 

@@ -19,6 +19,8 @@ import { PaymentsComponent } from './payments/payments.component';
 import { CsvUploadComponent } from './csv-upload/csv-upload.component';
 import { CommunitiesComponent } from './communities/communities.component';
 import { Siret } from './communities/siret.pipe';
+import { MatchesComponent } from './matches/matches.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { Siret } from './communities/siret.pipe';
     PaymentsComponent,
     CsvUploadComponent,
     CommunitiesComponent,
-    Siret
+    Siret,
+    MatchesComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -42,6 +46,9 @@ import { Siret } from './communities/siret.pipe';
     MaterialComponentsModule,
     AngularSplitModule.forRoot(),
     AngularDraggableModule
+  ],
+  entryComponents: [
+    ConfirmationDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

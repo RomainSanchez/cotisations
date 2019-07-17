@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/
 import { SplitComponent, SplitAreaDirective } from 'angular-split';
 import { MatTableDataSource, MatSort } from '@angular/material';
 
-import { Debt, Payment } from '../shared/sdk';
+import { Debt, Payment, DebtApi } from '../shared/sdk';
 import { PaymentsComponent } from '../payments/payments.component';
 
 @Component({
@@ -36,19 +36,14 @@ export class MatchComponent implements OnInit {
   debtDataSource: MatTableDataSource<Debt>;
   paymentDataSource: MatTableDataSource<Payment>;
 
-  constructor() {
+  constructor(private debtApi: DebtApi) {
     this.debtDataSource = new MatTableDataSource<Debt>();
     this.paymentDataSource = new MatTableDataSource<Payment>();
   }
 
   ngOnInit() {
-    this.debtDataSource.data = this.debts;
     this.debtDataSource.sort = this.debtSort;
     this.paymentDataSource.sort = this.paymentSort;
-  }
-
-  ngAfterViewInit() {
-
   }
 
   debtSelected (debts: Debt[]) {
@@ -67,6 +62,15 @@ export class MatchComponent implements OnInit {
 
   match() {
     console.log(this.debts, this.payments);
+
+    this.debts.forEach((debt: Debt) => {
+      console.log(this.payments[0]);
+      this.payments.forEach((payment: Payment) => {
+        this.debtApi.linkPayments(debt.id, payment.id).subscribe(result => {
+          console.log(result);
+        })
+      });
+    });
   }
 
   computeTotal() {
