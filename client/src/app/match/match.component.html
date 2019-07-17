@@ -80,7 +80,7 @@
           </div>
           <mat-icon mat-button id="validate" class="mat-18" color="accent"
             *ngIf="payments.length && debts.length"
-            (click)="match()"
+            (click)="openConfirmationDialog()"
             mat-tooltip="Valider le rapprochement"
             tooltip-position="below"
           >check_circle</mat-icon>

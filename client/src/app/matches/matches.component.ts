@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { Payment } from '../shared/sdk/models/index';
 import { PaymentApi } from '../shared/sdk/services/index';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-matches',
@@ -29,7 +30,11 @@ export class MatchesComponent implements OnInit {
 
   isLoading = false;
 
-  constructor(private paymentApi: PaymentApi) {
+  constructor(
+    private paymentApi: PaymentApi,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {
     this.tableDataSource = new MatTableDataSource<Payment>();
   }
 
@@ -42,7 +47,24 @@ export class MatchesComponent implements OnInit {
     this.tableDataSource.sort = this.sort;
   }
 
-  private getPayments() {
+  public openConfirmationDialog(payment: Payment): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: "Voulez vous vraiment décaisser ce virement ?"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.disburse(payment);
+      }
+    });
+  }
+
+  public doFilter(value: string): void {
+    this.tableDataSource.filter = value.trim().toLocaleLowerCase();
+  }
+
+  private getPayments(): void {
     this.isLoading = true;
 
     this.paymentApi.getMatched().subscribe((payments: Payment[]) => {
@@ -53,14 +75,11 @@ export class MatchesComponent implements OnInit {
     });
   }
 
-  public doFilter(value: string) {
-    this.tableDataSource.filter = value.trim().toLocaleLowerCase();
-  }
-
-  public disburse (payment: Payment) {
+  private disburse (payment: Payment): void {
     payment.disbursedAt = new Date().toString();
 
     this.paymentApi.replaceOrCreate(payment).subscribe(() => {
+      this.snackBar.open('Décaissement effectué');
       this.getPayments();
     });
   }

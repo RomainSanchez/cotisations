@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { SplitComponent, SplitAreaDirective } from 'angular-split';
-import { MatTableDataSource, MatSort } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 
 import { Debt, Payment, DebtApi } from '../shared/sdk';
 import { PaymentsComponent } from '../payments/payments.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-match',
@@ -36,7 +37,11 @@ export class MatchComponent implements OnInit {
   debtDataSource: MatTableDataSource<Debt>;
   paymentDataSource: MatTableDataSource<Payment>;
 
-  constructor(private debtApi: DebtApi) {
+  constructor(
+    private debtApi: DebtApi,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {
     this.debtDataSource = new MatTableDataSource<Debt>();
     this.paymentDataSource = new MatTableDataSource<Payment>();
   }
@@ -46,34 +51,34 @@ export class MatchComponent implements OnInit {
     this.paymentDataSource.sort = this.paymentSort;
   }
 
-  debtSelected (debts: Debt[]) {
+  public openConfirmationDialog(payment: Payment): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: "Voulez vous vraiment valider ce rapprochement ?"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.match();
+      }
+    });
+  }
+
+  public debtSelected (debts: Debt[]) {
     this.debts = debts;
     this.debtDataSource.data = this.debts;
 
     this.computeTotal();
   }
 
-  paymentSelected (payments: Payment[]) {
+  public paymentSelected (payments: Payment[]) {
     this.payments = payments;
     this.paymentDataSource.data = this.payments;
 
     this.computeTotal();
   }
 
-  match() {
-    console.log(this.debts, this.payments);
-
-    this.debts.forEach((debt: Debt) => {
-      console.log(this.payments[0]);
-      this.payments.forEach((payment: Payment) => {
-        this.debtApi.linkPayments(debt.id, payment.id).subscribe(result => {
-          console.log(result);
-        })
-      });
-    });
-  }
-
-  computeTotal() {
+  public computeTotal() {
     let debtTotal: number = 0;
     let paymentTotal: number = 0;
 
@@ -86,6 +91,16 @@ export class MatchComponent implements OnInit {
     });
 
     this.balance = debtTotal - paymentTotal;
+  }
+
+  private match() {
+    this.debts.forEach((debt: Debt) => {
+      this.payments.forEach((payment: Payment) => {
+        this.debtApi.linkPayments(debt.id, payment.id).subscribe(result => {
+          this.snackBar.open('Rapprochement effectué');
+        })
+      });
+    });
   }
 
 }
