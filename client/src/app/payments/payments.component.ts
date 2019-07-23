@@ -88,14 +88,8 @@ export class PaymentsComponent implements OnInit {
     this.isLoading = true;
   }
 
-  public uploadDone(success: boolean) {
-    if(success) {
-      this.getPayments();
-
-      return;
-    }
-
-    this.isLoading = false;
+  public uploadDone() {
+    this.getPayments();
   }
 
   public isPaymentSelected(payment: Payment): number {

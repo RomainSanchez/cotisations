@@ -95,6 +95,13 @@ export class MatchComponent implements OnInit {
     this.balance = debtTotal - paymentTotal;
   }
 
+  public clear() {
+    this.debts = [];
+    this.payments = [];
+    this.debtsComponent.clear();
+    this.paymentsComponent.clear();
+  }
+
   private match() {
     this.debts.forEach((debt: Debt) => {
       this.payments.forEach((payment: Payment) => {
@@ -109,12 +116,4 @@ export class MatchComponent implements OnInit {
       });
     });
   }
-
-  private clear() {
-    this.debts = [];
-    this.payments = [];
-    this.debtsComponent.clear();
-    this.paymentsComponent.clear();
-  }
-
 }
