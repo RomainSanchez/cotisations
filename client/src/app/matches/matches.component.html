@@ -1,3 +1,5 @@
+<h2 class="mat-display-1">Virements</h2>
+
 <mat-form-field>
   <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
 </mat-form-field>
@@ -41,8 +43,8 @@
             matRipple
             [matRippleCentered]="true"
             [matRippleUnbounded]="false"
-
             color="accent"
+            matTooltip="Décaisser"
           >
               <mat-icon>check_circle</mat-icon>
           </button>

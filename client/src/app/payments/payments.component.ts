@@ -110,10 +110,10 @@ export class PaymentsComponent implements OnInit {
     return key;
   }
 
-  public resetSelectedPayments() {
+  public clear() {
     this.selectedPayments = [];
 
-    this.matchPayments.emit(this.selectedPayments);
+    this.getPayments();
   }
 
 }

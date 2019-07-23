@@ -21,6 +21,7 @@ import { CommunitiesComponent } from './communities/communities.component';
 import { Siret } from './communities/siret.pipe';
 import { MatchesComponent } from './matches/matches.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { AccountComponent } from './account/account.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     CommunitiesComponent,
     Siret,
     MatchesComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    AccountComponent
   ],
   imports: [
     AppRoutingModule,

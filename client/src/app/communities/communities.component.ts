@@ -5,6 +5,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Community } from '../shared/sdk/models/index';
 import { CommunityApi } from '../shared/sdk/services/index';
 import { LoopBackConfig } from '../shared/sdk';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-communities',
@@ -17,8 +18,8 @@ export class CommunitiesComponent implements OnInit {
 
   displayedColumns = [
     'agirheCode',
-    'siret',
-    'label'
+    'label',
+    'siret'
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
@@ -28,8 +29,9 @@ export class CommunitiesComponent implements OnInit {
   isLoading = false;
 
   constructor(
-    private communityApi: CommunityApi,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router,
+    private communityApi: CommunityApi
   ) {
     this.tableDataSource = new MatTableDataSource<Community>();
   }
@@ -46,9 +48,7 @@ export class CommunitiesComponent implements OnInit {
   getCommunities() {
     this.isLoading = true;
 
-    return this.communityApi.find({
-      limit: 100
-    })
+    return this.communityApi.find()
     .subscribe((communities: Community[]) => {
       this.tableDataSource.data = communities;
 
@@ -68,8 +68,8 @@ export class CommunitiesComponent implements OnInit {
     this.tableDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  rowClicked(community: Community) {
-    console.log(community);
+  rowClicked(communityId: string) {
+    this.router.navigate(['/account', communityId]);
   }
 
 }

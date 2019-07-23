@@ -36,7 +36,7 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
     <mat-row *matRowDef="let community; columns: displayedColumns"
-      (click)=rowClicked(community)
+      (click)=rowClicked(community.id)
     ></mat-row>
 
 </mat-table>

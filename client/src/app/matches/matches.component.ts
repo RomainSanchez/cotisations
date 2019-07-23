@@ -79,7 +79,10 @@ export class MatchesComponent implements OnInit {
     payment.disbursedAt = new Date().toString();
 
     this.paymentApi.replaceOrCreate(payment).subscribe(() => {
-      this.snackBar.open('Décaissement effectué');
+      this.snackBar.open('Décaissement effectué', null, {
+        duration: 2000,
+      //  verticalPosition: 'top'
+      });
       this.getPayments();
     });
   }

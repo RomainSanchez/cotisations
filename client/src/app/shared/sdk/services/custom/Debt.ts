@@ -20,7 +20,6 @@ import { Payment } from '../../models/Payment';
  */
 @Injectable()
 export class DebtApi extends BaseLoopBackApi {
-
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
     @Inject(SocketConnection) protected connection: SocketConnection,
@@ -36,7 +35,7 @@ export class DebtApi extends BaseLoopBackApi {
    *
    * @param {any} id Debt id
    *
-   * @param {boolean} refresh 
+   * @param {boolean} refresh
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -252,7 +251,7 @@ export class DebtApi extends BaseLoopBackApi {
    *
    * @param {any} id Debt id
    *
-   * @param {object} filter 
+   * @param {object} filter
    *
    * @returns {object[]} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -347,7 +346,7 @@ export class DebtApi extends BaseLoopBackApi {
    *
    * Data properties:
    *
-   *  - `count` – `{number}` - 
+   *  - `count` – `{number}` -
    */
   public countPayments(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
@@ -457,7 +456,7 @@ export class DebtApi extends BaseLoopBackApi {
    *
    * @param {any} nk Foreign key for payments.
    *
-   * @param {boolean} refresh 
+   * @param {boolean} refresh
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -694,7 +693,7 @@ export class DebtApi extends BaseLoopBackApi {
    *
    * @param {any} nk Foreign key for payments.
    *
-   * @param {object} filter 
+   * @param {object} filter
    *
    * @returns {object[]} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -798,7 +797,7 @@ export class DebtApi extends BaseLoopBackApi {
    *
    * Data properties:
    *
-   *  - `count` – `{number}` - 
+   *  - `count` – `{number}` -
    */
   public countPaymentsDebts(id: any, nk: any, where: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";

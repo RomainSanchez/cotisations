@@ -54,7 +54,6 @@ export class DebtsComponent implements OnInit {
     this.debtApi.getUnmatched().subscribe((debts: Debt[]) => {
       this.debts = debts;
       this.tableDataSource.data = this.debts;
-
       this.isLoading = false;
     });
   }
@@ -62,12 +61,12 @@ export class DebtsComponent implements OnInit {
   updateDebts() {
     this.isLoading = true;
 
-    this.http.get(`${LoopBackConfig.getPath()}/debts/retrieve`).subscribe(data => {
+    this.http.get(`${LoopBackConfig.getPath()}/debts/retrieve`).subscribe(() => {
       this.getDebts();
     });
   }
 
-  doFilter = (value: string) => {
+  doFilter (value: string) {
     this.tableDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
@@ -97,6 +96,12 @@ export class DebtsComponent implements OnInit {
     });
 
     return key;
+  }
+
+  public clear() {
+    this.selectedDebts = [];
+
+    this.getDebts();
   }
 
 }

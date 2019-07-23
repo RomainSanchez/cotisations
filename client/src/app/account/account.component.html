@@ -1,0 +1,150 @@
+<button id="back" routerLink="/communities" mat-raised-button color="accent">
+  <mat-icon>arrow_back</mat-icon>
+  Revenir à la liste
+</button>
+
+<mat-card id="account">
+  <mat-grid-list cols="3" rowHeight = "40px">
+    <mat-grid-tile id="title" [colspan] = "3" [rowspan] = "1">
+      {{ community.label }}
+    </mat-grid-tile>
+    <mat-grid-tile id="siret" [colspan] = "1" [rowspan] = "1">
+      Siret: {{ community.siret| siret }}
+    </mat-grid-tile>
+    <mat-grid-tile id="email" [colspan] = "1" [rowspan] = "1">
+      {{ community.email }}
+    </mat-grid-tile>
+    <mat-grid-tile id="agirhe" [colspan] = "1" [rowspan] = "1">
+      Agirhe: {{ community.agirheCode }}
+    </mat-grid-tile>
+
+  </mat-grid-list>
+</mat-card>
+
+<div id="lists">
+  <mat-card id="debts">
+    <h3>Déclarations non satisfaites</h3>
+    <h4 class="total"><span>{{ debtTotal| number: '1.2-2' }} €</span> Déclarés</h4>
+    <mat-form-field>
+      <input matInput type="text" (keyup)="filter($event.target.value, true)" placeholder="Filtrer">
+    </mat-form-field>
+
+    <mat-table class="debts-table" #debtSort="matSort" matSort [dataSource]="debtDataSource">
+      <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Date d'encaissement</mat-header-cell>
+          <mat-cell *matCellDef="let debt">{{ debt.date }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Montant</mat-header-cell>
+          <mat-cell *matCellDef="let debt">{{ debt.amount }} €</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+        <mat-cell *matCellDef="let debt">{{ debt.type }}</mat-cell>
+
+      </ng-container>
+
+      <ng-container matColumnDef="basis">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Assiette</mat-header-cell>
+          <mat-cell *matCellDef="let debt">{{ debt.basis }}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="debtColumns"></mat-header-row>
+
+      <mat-row *matRowDef="let debt; columns: debtColumns"
+      ></mat-row>
+
+    </mat-table>
+
+    <mat-paginator #debtPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </mat-card>
+
+  <mat-card id="paid-debts">
+    <h3>Déclarations satisfaites</h3>
+    <h4 class="total"><span>{{ paidTotal| number: '1.2-2'  }} €</span> virés</h4>
+    <p class="disbursed-total"><span>{{ disbursedTotal| number: '1.2-2' }} €</span> Décaissés</p>
+    <mat-form-field>
+      <input matInput type="text" (keyup)="filter($event.target.value, false)" placeholder="Filtrer">
+    </mat-form-field>
+
+    <mat-table class="debts-table"
+      #paidDebtSort="matSort"
+      matSort
+      [dataSource]="paidDebtDataSource"
+      multiTemplateDataRows
+    >
+      <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Date d'encaissement</mat-header-cell>
+          <mat-cell *matCellDef="let debt">{{ debt.date }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Montant</mat-header-cell>
+          <mat-cell *matCellDef="let debt">{{ debt.amount }} €</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+        <mat-cell *matCellDef="let debt">{{ debt.type }}</mat-cell>
+
+      </ng-container>
+
+      <ng-container matColumnDef="basis">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Assiette</mat-header-cell>
+          <mat-cell *matCellDef="let debt">{{ debt.basis }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="payments">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Décaissés</mat-header-cell>
+          <mat-cell *matCellDef="let debt">{{ disbursedStatus(debt.payments) }} / {{ debt.payments.length }}</mat-cell>
+      </ng-container>
+
+      <!-- Column used to display details-->
+      <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let debt" [attr.colspan]="paidDebtColumns.length">
+            <div class="payments-container"
+                 [@detailExpand]="debt == expandedElement ? 'expanded' : 'collapsed'"
+            >
+              <mat-list class="payments">
+                <mat-list-item *ngFor="let payment of debt.payments">
+                  <h4 class="label" mat-line>{{ payment.label }}</h4>
+                  <p mat-line> {{ payment.credit }}€  Versé le {{ payment.date }}</p>
+                  <div class="disbursed" *ngIf="payment.disbursedAt !== null">
+                    <p>{{ payment.disbursedAt| date:'dd/MM/y' }}</p>
+                  </div>
+                  <div class="disbursed" *ngIf="payment.disbursedAt === null">
+                    <button
+                      (click)="openConfirmationDialog(payment)"
+                      mat-button
+                      matRipple
+                      [matRippleCentered]="true"
+                      [matRippleUnbounded]="false"
+                      color="accent"
+                      matTooltip="Décaisser"
+                    >
+                        <mat-icon>check_circle</mat-icon>
+                    </button>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+          </td>
+        </ng-container>
+
+      <mat-header-row *matHeaderRowDef="paidDebtColumns"></mat-header-row>
+
+      <mat-row *matRowDef="let debt; columns: paidDebtColumns"
+        class="debt-row"
+        [class.expanded]="expandedElement === debt"
+        (click)="expandedElement = expandedElement === debt ? null : debt"
+      ></mat-row>
+
+      <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="payments-row"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator #paidDebtPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </mat-card>
+</div>

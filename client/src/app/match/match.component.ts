@@ -3,16 +3,18 @@ import { SplitComponent, SplitAreaDirective } from 'angular-split';
 import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 
 import { Debt, Payment, DebtApi } from '../shared/sdk';
-import { PaymentsComponent } from '../payments/payments.component';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { PaymentsComponent } from '../payments/payments.component';
+import { DebtsComponent } from '../debts/debts.component';
 
 @Component({
   selector: 'app-match',
   templateUrl: './match.component.html',
   styleUrls: ['./match.component.sass'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MatchComponent implements OnInit {
+  @ViewChild('paymentsComponent') paymentsComponent: PaymentsComponent
+  @ViewChild('debtsComponent') debtsComponent: DebtsComponent
   @ViewChild('split') split: SplitComponent;
   @ViewChild('debtPanel') debtPanel: SplitAreaDirective;
   @ViewChild('paymentPanel') paymentPanel: SplitAreaDirective;
@@ -97,10 +99,22 @@ export class MatchComponent implements OnInit {
     this.debts.forEach((debt: Debt) => {
       this.payments.forEach((payment: Payment) => {
         this.debtApi.linkPayments(debt.id, payment.id).subscribe(result => {
-          this.snackBar.open('Rapprochement effectué');
+          this.snackBar.open('Rapprochement effectué', null, {
+            duration: 2000,
+           // verticalPosition: 'top'
+          });
+
+          this.clear();
         })
       });
     });
+  }
+
+  private clear() {
+    this.debts = [];
+    this.payments = [];
+    this.debtsComponent.clear();
+    this.paymentsComponent.clear();
   }
 
 }
