@@ -32,11 +32,14 @@ async function importDebts (app) {
 
     debts = await debtParser.parse(debts, config.vocabulary);
 
-    //await app.models.Debt.create(debts);
-    debts.forEach(async debt => {
+    for (const debt of debts) {
+        if (await exists(debt)) {
+            continue;
+        }
+
         debt.communityId = await getCommunityId(debt.agirheCode);
-        debt = await debtModel.create(debt);
-    });
+        await debtModel.create(debt);
+    }
 
     return debts;
 };
@@ -54,5 +57,22 @@ const getCommunityId = async (agirheCode) => {
 
     lastCommunity = community;
 
-    return community.id;
+    return lastCommunity.id;
+}
+
+const exists = async (debt) => {
+    const existing = await debtModel.findOne({
+        fields: {
+            agirheCode: true,
+            date: true,
+            amount: true
+        },
+        where: {
+            agirheCode: debt.agirheCode,
+            date: debt.date,
+            amount: debt.amount
+        }
+    });
+
+    return existing !== null;
 }
