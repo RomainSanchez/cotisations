@@ -55,8 +55,6 @@ export class DebtsComponent implements OnInit {
       this.debts = debts;
       this.tableDataSource.data = this.debts;
       this.isLoading = false;
-
-      console.log(this.debts);
     });
   }
 
@@ -104,6 +102,10 @@ export class DebtsComponent implements OnInit {
     this.selectedDebts = [];
 
     this.getDebts();
+  }
+
+  public removeLast() {
+    this.selectedDebts.pop();
   }
 
 }

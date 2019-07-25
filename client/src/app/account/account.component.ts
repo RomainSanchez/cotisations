@@ -144,18 +144,24 @@ export class AccountComponent implements OnInit {
   }
 
   private computeTotals(): void {
+    let paymentsTotal: number;
+
     this.debts.forEach((debt: Debt) => {
       this.debtTotal += parseFloat(debt.amount);
     });
 
     this.paidDebts.forEach((debt: Debt) => {
+      paymentsTotal = 0;
+
       debt.payments.forEach((payment: Payment) => {
         if(payment.disbursedAt !== null) {
           this.disbursedTotal += parseFloat(payment.credit);
         }
+
+        paymentsTotal += parseFloat(payment.credit);
       });
 
-      this.paidTotal += parseFloat(debt.amount);
+      this.paidTotal += paymentsTotal;
     });
   }
 

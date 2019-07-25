@@ -67,15 +67,35 @@ export class MatchComponent implements OnInit {
   }
 
   public debtSelected (debts: Debt[]) {
-    this.debts = debts;
-    this.debtDataSource.data = this.debts;
+    if (this.payments.length < 2 || this.debts.length == 0 || debts.length < this.debts.length) {
+      this.debts = debts;
+      this.debtDataSource.data = this.debts;
+    }
+
+    if (debts.length > 1 && this.payments.length > 1) {
+      this.snackBar.open('Seulemennt une déclaration peut être satisfaite par plusieurs virements', null, {
+        duration: 2000,
+      });
+
+      this.debtsComponent.removeLast();
+    }
 
     this.computeTotal();
   }
 
   public paymentSelected (payments: Payment[]) {
-    this.payments = payments;
-    this.paymentDataSource.data = this.payments;
+    if (this.payments.length == 0 || this.debts.length < 2 || payments.length < this.payments.length) {
+      this.payments = payments;
+      this.paymentDataSource.data = this.payments;
+    }
+
+    if (payments.length > 1 && this.debts.length > 1) {
+      this.snackBar.open('Seulement un virement peut satisfaire plusieurs déclarations', null, {
+        duration: 2000,
+      });
+
+      this.paymentsComponent.removeLast();
+    }
 
     this.computeTotal();
   }

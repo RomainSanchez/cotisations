@@ -7,7 +7,6 @@ module.exports = function(Payment) {
         const csv = Object.keys(data)[0];
 
         const rows = await csvToJson().fromString(csv);
-        console.log(rows[12])
 
         for(const row of rows) {
             const payment = {

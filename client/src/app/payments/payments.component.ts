@@ -110,4 +110,8 @@ export class PaymentsComponent implements OnInit {
     this.getPayments();
   }
 
+  public removeLast() {
+    this.selectedPayments.pop();
+  }
+
 }
