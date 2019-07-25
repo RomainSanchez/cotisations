@@ -53,7 +53,6 @@
         'selected': isPaymentSelected(payment) !== -1,
         'error': !isLabelValid(payment.label)
       }"
-      [ngClass]="isLabelValid(payment.label) ? '' : 'error'"
     ></mat-row>
 
 </mat-table>

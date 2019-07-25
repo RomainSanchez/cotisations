@@ -45,17 +45,18 @@ export class DebtsComponent implements OnInit {
 
   ngAfterViewInit() {
     this.tableDataSource.paginator = this.paginator;
+    this.tableDataSource.sortingDataAccessor = (debt: Debt, property: string): string|number => {
+      switch(property) {
+        case 'community': return debt.community.label;
+        default: return debt[property];
+      }
+    };
     this.tableDataSource.sort = this.sort;
-  }
+    this.tableDataSource.filterPredicate = (data, filter) => {
+      const dataStr = JSON.stringify(Object.values(data));
 
-  getDebts() {
-    this.isLoading = true;
-
-    this.debtApi.getUnmatched().subscribe((debts: Debt[]) => {
-      this.debts = debts;
-      this.tableDataSource.data = this.debts;
-      this.isLoading = false;
-    });
+      return dataStr.toLowerCase().indexOf(filter) != -1;
+    }
   }
 
   updateDebts() {
@@ -98,14 +99,24 @@ export class DebtsComponent implements OnInit {
     return key;
   }
 
-  public clear() {
+  clear() {
     this.selectedDebts = [];
 
     this.getDebts();
   }
 
-  public removeLast() {
+  removeLast() {
     this.selectedDebts.pop();
+  }
+
+  private getDebts() {
+    this.isLoading = true;
+
+    this.debtApi.getUnmatched().subscribe((debts: Debt[]) => {
+      this.debts = debts;
+      this.tableDataSource.data = this.debts;
+      this.isLoading = false;
+    });
   }
 
 }

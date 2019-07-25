@@ -14,15 +14,15 @@ export class PaymentsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  private displayedColumns: any = [
+  displayedColumns: any = [
     'date',
     'value',
     'label',
     'debit',
     'credit'
   ];
-  private pageSize = 10;
-  private pageSizeOptions = [5, 10, 20, 50, 100];
+  pageSize = 10;
+  pageSizeOptions = [5, 10, 20, 50, 100];
 
   private tableDataSource: MatTableDataSource<Payment>;
   private payments: Payment[];
@@ -43,22 +43,11 @@ export class PaymentsComponent implements OnInit {
     this.tableDataSource.sort = this.sort;
   }
 
-  private getPayments() {
-    this.isLoading = true;
-
-    this.paymentApi.getUnmatched().subscribe((payments: Payment[]) => {
-      this.payments = payments;
-      this.tableDataSource.data = this.payments;
-
-      this.isLoading = false;
-    });
-  }
-
-  public doFilter = (value: string) => {
+  doFilter = (value: string) => {
     this.tableDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  public rowClicked(payment: Payment) {
+  rowClicked(payment: Payment) {
     let key:number = this.isPaymentSelected(payment);
 
     if(key !== -1 ) {
@@ -74,7 +63,7 @@ export class PaymentsComponent implements OnInit {
     this.matchPayments.emit(this.selectedPayments);
   }
 
-  public isLabelValid (label: string): any {
+  isLabelValid (label: string): RegExpMatchArray {
     const regularExpressions = [
       new RegExp('COTIS_\\d{4}_\\d{2}_d{14}', 'i'),
       new RegExp('COTIS\\s\\d{4}\\s\\d{2}\\s\\d{14}', 'i')
@@ -84,15 +73,15 @@ export class PaymentsComponent implements OnInit {
       (label.match(regularExpressions[0]) || label.match(regularExpressions[1]));
   }
 
-  public uploadStarted() {
+  uploadStarted() {
     this.isLoading = true;
   }
 
-  public uploadDone() {
+  uploadDone() {
     this.getPayments();
   }
 
-  public isPaymentSelected(payment: Payment): number {
+  isPaymentSelected(payment: Payment): number {
     let key: number = -1;
 
     this.selectedPayments.forEach((thePayment, theKey) => {
@@ -104,14 +93,25 @@ export class PaymentsComponent implements OnInit {
     return key;
   }
 
-  public clear() {
+  clear() {
     this.selectedPayments = [];
 
     this.getPayments();
   }
 
-  public removeLast() {
+  removeLast() {
     this.selectedPayments.pop();
+  }
+
+  private getPayments() {
+    this.isLoading = true;
+
+    this.paymentApi.getUnmatched().subscribe((payments: Payment[]) => {
+      this.payments = payments;
+      this.tableDataSource.data = this.payments;
+
+      this.isLoading = false;
+    });
   }
 
 }
