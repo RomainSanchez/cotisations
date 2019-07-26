@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, DateAdapter } from '@angular/material';
 
 import { LoopBackConfig } from '../shared/sdk/lb.config';
 import { Debt } from '../shared/sdk/models/index';
 import { DebtApi } from '../shared/sdk/services/index';
+import { Moment } from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-debts',
@@ -31,20 +33,26 @@ export class DebtsComponent implements OnInit {
   debts: Debt[] = [];
   selectedDebts: Debt[] = [];
   isLoading = false;
+  fromDate: Moment;
+  toDate: Moment = moment();
 
   constructor(
     private debtApi: DebtApi,
-    private http: HttpClient
+    private http: HttpClient,
+    private dateAdapter: DateAdapter<Date>
   ) {
     this.tableDataSource = new MatTableDataSource<Debt>();
+    this.dateAdapter.setLocale('fr');
   }
 
   ngOnInit() {
     this.getDebts();
+    moment.locale('fr');
   }
 
   ngAfterViewInit() {
     this.tableDataSource.paginator = this.paginator;
+    // Allow sorting on nested property debt.community.label
     this.tableDataSource.sortingDataAccessor = (debt: Debt, property: string): string|number => {
       switch(property) {
         case 'community': return debt.community.label;
@@ -52,11 +60,8 @@ export class DebtsComponent implements OnInit {
       }
     };
     this.tableDataSource.sort = this.sort;
-    this.tableDataSource.filterPredicate = (data, filter) => {
-      const dataStr = JSON.stringify(Object.values(data));
-
-      return dataStr.toLowerCase().indexOf(filter) != -1;
-    }
+    // Allow filtering on nested property debt.community.label
+    this.tableDataSource.filterPredicate = this.filter;
   }
 
   updateDebts() {
@@ -68,7 +73,16 @@ export class DebtsComponent implements OnInit {
   }
 
   doFilter (value: string) {
-    this.tableDataSource.filter = value.trim().toLocaleLowerCase();
+    if(value !== 'DATE_RANGE_NO_FILTER') {
+      this.tableDataSource.filter = value.trim().toLocaleLowerCase();
+
+      return;
+    }
+    const currentFilter = this.tableDataSource.filter;
+
+    // Hack to trigger filter update
+    this.tableDataSource.filter = '------';
+    this.tableDataSource.filter = currentFilter !== null ? currentFilter: ' ';
   }
 
   rowClicked(debt: Debt) {
@@ -117,6 +131,21 @@ export class DebtsComponent implements OnInit {
       this.tableDataSource.data = this.debts;
       this.isLoading = false;
     });
+  }
+
+  private filter = (debt: Debt, filter: any) => {
+    const debtAsString = JSON.stringify(Object.values(debt));
+    const debtDate = moment(debt.date, 'DD/MM/YYYY');
+
+    if(this.fromDate !== undefined) {
+      return debtDate.isSameOrAfter(this.fromDate)
+        && debtDate.isSameOrBefore(this.toDate)
+        && debtAsString.toLowerCase().indexOf(filter) != -1
+      ;
+    }
+
+    return debtDate.isBefore(this.toDate)
+        && debtAsString.toLowerCase().indexOf(filter) != -1;
   }
 
 }

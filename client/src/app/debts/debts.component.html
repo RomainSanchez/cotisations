@@ -1,6 +1,26 @@
 <mat-form-field>
   <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
 </mat-form-field>
+<mat-form-field>
+  <input matInput
+    [matDatepicker]="fromDatePicker"
+    placeholder="Du"
+    [(ngModel)]="fromDate"
+    (dateInput)="doFilter('DATE_RANGE_NO_FILTER')"
+  >
+  <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+  <mat-datepicker #fromDatePicker></mat-datepicker>
+</mat-form-field>
+<mat-form-field>
+  <input matInput
+    [matDatepicker]="toDatePicker"
+    placeholder="Au"
+    [(ngModel)]="toDate"
+    (dateInput)="doFilter('DATE_RANGE_NO_FILTER')"
+  >
+  <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+  <mat-datepicker #toDatePicker></mat-datepicker>
+</mat-form-field>
 
 <button mat-flat-button color="accent" (click)="updateDebts()">
     <mat-icon class="mat-18">update</mat-icon>
