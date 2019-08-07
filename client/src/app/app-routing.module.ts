@@ -5,12 +5,14 @@ import { MatchComponent } from './match/match.component';
 import { MatchesComponent } from './matches/matches.component';
 import { AccountComponent } from './account/account.component';
 import { CommunityResolver } from './account/community-resolver.service';
+import { ErrorsComponent } from './errors/errors.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/communities', pathMatch: 'full'},
   { path: 'communities', component: CommunitiesComponent },
   { path: 'match', component: MatchComponent },
   { path: 'matches', component: MatchesComponent },
+  { path: 'errors', component: ErrorsComponent },
   { path: 'account/:communityId',
     component: AccountComponent,
     resolve: {community: CommunityResolver}

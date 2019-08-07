@@ -51,7 +51,7 @@
       (click)=rowClicked(payment)
       [ngClass]="{
         'selected': isPaymentSelected(payment) !== -1,
-        'error': !isLabelValid(payment.label)
+        'error': !labelValidator.isValid(payment.label)
       }"
     ></mat-row>
 

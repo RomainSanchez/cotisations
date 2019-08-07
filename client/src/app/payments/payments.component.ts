@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/cor
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Payment } from '../shared/sdk/models/index';
 import { PaymentApi } from '../shared/sdk/services/index';
+import { LabelValidatorService } from '../services/label-validator.service';
 
 @Component({
   selector: 'app-payments',
@@ -30,7 +31,11 @@ export class PaymentsComponent implements OnInit {
 
   isLoading = false;
 
-  constructor(private paymentApi: PaymentApi) {
+  constructor(
+    private paymentApi: PaymentApi,
+    private labelValidator: LabelValidatorService
+
+  ) {
     this.tableDataSource = new MatTableDataSource<Payment>();
   }
 
@@ -61,16 +66,6 @@ export class PaymentsComponent implements OnInit {
     }
 
     this.matchPayments.emit(this.selectedPayments);
-  }
-
-  isLabelValid (label: string): RegExpMatchArray {
-    const regularExpressions = [
-      new RegExp('COTIS_\\d{4}_\\d{2}_d{14}', 'i'),
-      new RegExp('COTIS\\s\\d{4}\\s\\d{2}\\s\\d{14}', 'i')
-    ];
-
-    return (label && label !== ' ' && label !== 'Libellé') &&
-      (label.match(regularExpressions[0]) || label.match(regularExpressions[1]));
   }
 
   uploadStarted() {
