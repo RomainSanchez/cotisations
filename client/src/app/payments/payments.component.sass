@@ -1,12 +1,17 @@
+@import './src/styles.sass'
+
+$columns: (date: 2rem, value: 2rem, label: 20rem, credit: 2rem);
+@include mat-table-column-widths($columns)
+
 .mat-cell, .mat-header-cell, .mat-footer-cell
-    min-height: 50px
-    justify-content: space-around
+  min-height: 50px
+  justify-content: space-around
 
 app-csv-upload
   float: right
 
 mat-row.selected
-  background: #1DE9B6;
+  background: #45A2A2;
 
 .error
   .mat-cell

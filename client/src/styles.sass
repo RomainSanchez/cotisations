@@ -1,3 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+@mixin mat-table-column-widths($columns)
+  @each $column, $width in $columns
+    .mat-column-#{$column}
+      flex: $width;
