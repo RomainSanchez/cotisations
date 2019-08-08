@@ -156,7 +156,7 @@ export class DebtsComponent implements OnInit {
       matchFilter.push(customFilter.some(Boolean));
     });
 
-    if(this.fromDate !== undefined) {
+    if(this.fromDate) {
       return debtDate.isSameOrAfter(this.fromDate)
         && debtDate.isSameOrBefore(this.toDate)
         && matchFilter.every(Boolean)
