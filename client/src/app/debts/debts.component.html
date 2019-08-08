@@ -1,25 +1,24 @@
 <mat-form-field>
   <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
 </mat-form-field>
-<mat-form-field>
-  <input matInput
-    [matDatepicker]="fromDatePicker"
-    placeholder="Du"
-    [(ngModel)]="fromDate"
-    (dateInput)="doFilter('DATE_RANGE_NO_FILTER')"
-  >
-  <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
-  <mat-datepicker #fromDatePicker></mat-datepicker>
+<mat-form-field class="period-filter">
+  <mat-label>De</mat-label>
+  <mat-select [(ngModel)]="fromPeriod" (selectionChange)="applyPeriod()">
+    <mat-option *ngIf="period !== null" [value]="null">--Aucune</mat-option>
+    <mat-option *ngFor="let period of periods" [value]="period.value">
+      {{ period.name }}
+    </mat-option>
+  </mat-select>
 </mat-form-field>
-<mat-form-field>
-  <input matInput
-    [matDatepicker]="toDatePicker"
-    placeholder="Au"
-    [(ngModel)]="toDate"
-    (dateInput)="doFilter('DATE_RANGE_NO_FILTER')"
-  >
-  <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
-  <mat-datepicker #toDatePicker></mat-datepicker>
+
+<mat-form-field class="period-filter">
+  <mat-label>A</mat-label>
+  <mat-select [(ngModel)]="toPeriod" (selectionChange)="applyPeriod()">
+    <mat-option *ngIf="period !== null" [value]="null">--Aucune</mat-option>
+    <mat-option *ngFor="let period of periods" [value]="period.value">
+      {{ period.name }}
+    </mat-option>
+  </mat-select>
 </mat-form-field>
 
 <button mat-raised-button color="accent" (click)="updateDebts()">

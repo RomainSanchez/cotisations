@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+
+import { Moment } from 'moment';
+import * as moment from 'moment';
+
 import { Payment } from '../shared/sdk/models/index';
 import { PaymentApi } from '../shared/sdk/services/index';
 import { LabelValidatorService } from '../services/label-validator.service';
@@ -23,6 +27,8 @@ export class PaymentsComponent implements OnInit {
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
+  fromDate: Moment;
+  toDate: Moment = moment();
 
   private tableDataSource: MatTableDataSource<Payment>;
   private payments: Payment[];
@@ -48,11 +54,11 @@ export class PaymentsComponent implements OnInit {
     this.tableDataSource.sort = this.sort;
   }
 
-  doFilter = (value: string) => {
+  doFilter (value: string): void {
     this.tableDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  rowClicked(payment: Payment) {
+  rowClicked(payment: Payment): void {
     let key:number = this.isPaymentSelected(payment);
 
     if(key !== -1 ) {
@@ -68,11 +74,11 @@ export class PaymentsComponent implements OnInit {
     this.matchPayments.emit(this.selectedPayments);
   }
 
-  uploadStarted() {
+  uploadStarted(): void {
     this.isLoading = true;
   }
 
-  uploadDone() {
+  uploadDone(): void {
     this.getPayments();
   }
 
@@ -88,17 +94,32 @@ export class PaymentsComponent implements OnInit {
     return key;
   }
 
-  clear() {
+  clear(): void {
     this.selectedPayments = [];
 
     this.getPayments();
   }
 
-  removeLast() {
+  removeLast(): void {
     this.selectedPayments.pop();
   }
 
-  private getPayments() {
+  applyPeriod(): void {
+    this.tableDataSource.data = this.payments.filter((payment: Payment) => {
+      const date = moment(payment.date, 'DD/MM/YYYY');
+
+      if(this.fromDate) {
+        return date.isSameOrAfter(this.fromDate) &&
+          date.isSameOrBefore(this.toDate);
+      }
+
+      if(this.toDate) {
+        return date.isSameOrBefore(this.toDate);
+      }
+    });
+  }
+
+  private getPayments(): void {
     this.isLoading = true;
 
     this.paymentApi.getUnmatched().subscribe((payments: Payment[]) => {
@@ -109,7 +130,7 @@ export class PaymentsComponent implements OnInit {
     });
   }
 
-  private filter(payment: Payment, filters) {
+  private filter(payment: Payment, filters): boolean {
     const matchFilter = [];
     const filterArray = filters.split('+');
 

@@ -28,13 +28,26 @@ export class DebtsComponent implements OnInit {
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
-
   tableDataSource: MatTableDataSource<Debt>;
   debts: Debt[] = [];
   selectedDebts: Debt[] = [];
   isLoading = false;
-  fromDate: Moment;
-  toDate: Moment = moment();
+  fromPeriod: number = null;
+  toPeriod: number;
+  periods: Period[] = [
+    {name: 'Janvier', value: 1},
+    {name: 'Février', value: 2},
+    {name: 'Mars', value: 3},
+    {name: 'Avril', value: 4},
+    {name: 'Mai', value: 5},
+    {name: 'Juin', value: 6},
+    {name: 'Juillet', value: 7},
+    {name: 'Aout', value: 8},
+    {name: 'Septembre', value: 9},
+    {name: 'Octobre', value: 10},
+    {name: 'Novembre', value: 11},
+    {name: 'Décembre', value: 12}
+  ]
 
   constructor(
     private debtApi: DebtApi,
@@ -48,7 +61,7 @@ export class DebtsComponent implements OnInit {
   ngOnInit() {
     this.getDebts();
     moment.locale('fr');
-
+    this.toPeriod = moment().month() + 1;
     this.tableDataSource.filterPredicate = this.filter;
   }
 
@@ -123,6 +136,20 @@ export class DebtsComponent implements OnInit {
     this.selectedDebts.pop();
   }
 
+  applyPeriod() {
+    this.tableDataSource.data = this.debts.filter((debt: Debt) => {
+      const debtMonth = parseInt(debt.date.split('/')[0]);
+
+      if(this.fromPeriod !== null) {
+        return debtMonth >= this.fromPeriod &&
+          debtMonth <= this.toPeriod
+        ;
+      }
+
+      return debtMonth <= this.toPeriod;
+    });
+  }
+
   private getDebts() {
     this.isLoading = true;
 
@@ -145,7 +172,6 @@ export class DebtsComponent implements OnInit {
       debt.date,
       debt.type
     ];
-    const debtDate = moment(debt.date, 'MM/YYYY');
 
     filterArray.forEach(filter => {
       const customFilter = [];
@@ -156,15 +182,12 @@ export class DebtsComponent implements OnInit {
       matchFilter.push(customFilter.some(Boolean));
     });
 
-    if(this.fromDate) {
-      return debtDate.isSameOrAfter(this.fromDate)
-        && debtDate.isSameOrBefore(this.toDate)
-        && matchFilter.every(Boolean)
-      ;
-    }
-
-    return debtDate.isBefore(this.toDate)
-        && matchFilter.every(Boolean);
+    return matchFilter.every(Boolean);
   }
 
+}
+
+export interface Period {
+  name: string;
+  value: number;
 }
