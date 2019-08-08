@@ -31,7 +31,7 @@
 
     <mat-table class="debts-table" #debtSort="matSort" matSort [dataSource]="debtDataSource">
       <ng-container matColumnDef="date">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Date d'encaissement</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Période</mat-header-cell>
           <mat-cell *matCellDef="let debt">{{ debt.date }}</mat-cell>
       </ng-container>
 
@@ -76,7 +76,7 @@
       multiTemplateDataRows
     >
       <ng-container matColumnDef="date">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Date d'encaissement</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Période</mat-header-cell>
           <mat-cell *matCellDef="let debt">{{ debt.date }}</mat-cell>
       </ng-container>
 

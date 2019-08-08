@@ -19,7 +19,6 @@ export class PaymentsComponent implements OnInit {
     'date',
     'value',
     'label',
-    'debit',
     'credit'
   ];
   pageSize = 10;
@@ -93,6 +92,10 @@ export class PaymentsComponent implements OnInit {
     this.selectedPayments = [];
 
     this.getPayments();
+  }
+
+  removeLast() {
+    this.selectedPayments.pop();
   }
 
   private getPayments() {

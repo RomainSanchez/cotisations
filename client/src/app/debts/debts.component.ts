@@ -145,7 +145,7 @@ export class DebtsComponent implements OnInit {
       debt.date,
       debt.type
     ];
-    const debtDate = moment(debt.date, 'DD/MM/YYYY');
+    const debtDate = moment(debt.date, 'MM/YYYY');
 
     filterArray.forEach(filter => {
       const customFilter = [];

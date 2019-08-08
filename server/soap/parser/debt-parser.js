@@ -20,7 +20,7 @@ module.exports = {
                     debt = rawDebt[label].indexOf('*') === 0 ?
                         {
                             agirheCode: rawDebt.code.substring(1),
-                            date: `01/01/${year}`,
+                            date: `01/${year}`,
                             type: 'Additionnelle',
                             basis: 'CNRACL',
                             amount: null,
@@ -29,7 +29,7 @@ module.exports = {
                         }:
                         {
                             agirheCode: rawDebt.code,
-                            date: `01/${vocabulary[labelParts[0]]}/${year}`,
+                            date: `${vocabulary[labelParts[0]]}/${year}`,
                             type: vocabulary[labelParts[2]],
                             basis: vocabulary[labelParts[1]],
                             amount: rawDebt[label],
