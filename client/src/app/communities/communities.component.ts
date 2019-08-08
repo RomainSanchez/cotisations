@@ -23,7 +23,6 @@ export class CommunitiesComponent implements OnInit {
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
-
   tableDataSource: MatTableDataSource<Community>;
   selectedcommunity: Community;
   isLoading = false;
@@ -69,7 +68,7 @@ export class CommunitiesComponent implements OnInit {
     this.tableDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  rowClicked(communityId: string) {
+  rowClicked(communityId: number) {
     this.router.navigate(['/account', communityId]);
   }
 
@@ -77,15 +76,15 @@ export class CommunitiesComponent implements OnInit {
     const matchFilter = [];
     const filterArray = filters.split('+');
 
-    delete community.id;
-
     const fields = Object.values(community).filter(Boolean);
 
     filterArray.forEach(filter => {
       const customFilter = [];
 
       fields.forEach(field => {
-        customFilter.push(field.toLocaleLowerCase().includes(filter))
+        if(typeof field === 'string') {
+          customFilter.push(field.toLocaleLowerCase().includes(filter));
+        }
       });
       matchFilter.push(customFilter.some(Boolean));
     });
