@@ -38,6 +38,7 @@ export class CommunitiesComponent implements OnInit {
 
   ngOnInit() {
     this.getCommunities();
+    this.tableDataSource.filterPredicate = this.filter;
   }
 
   ngAfterViewInit() {
@@ -70,6 +71,26 @@ export class CommunitiesComponent implements OnInit {
 
   rowClicked(communityId: string) {
     this.router.navigate(['/account', communityId]);
+  }
+
+  private filter(community: Community, filters: string) {
+    const matchFilter = [];
+    const filterArray = filters.split('+');
+
+    delete community.id;
+
+    const fields = Object.values(community).filter(Boolean);
+
+    filterArray.forEach(filter => {
+      const customFilter = [];
+
+      fields.forEach(field => {
+        customFilter.push(field.toLocaleLowerCase().includes(filter))
+      });
+      matchFilter.push(customFilter.some(Boolean));
+    });
+
+    return matchFilter.every(Boolean);
   }
 
 }

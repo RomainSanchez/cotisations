@@ -114,7 +114,7 @@ export class ErrorsComponent implements OnInit {
     });
   }
 
-  private filter(payment: Payment, filters) {
+  private filter(payment: Payment, filters: string) {
     const matchFilter = [];
     const filterArray = filters.split('+');
 
