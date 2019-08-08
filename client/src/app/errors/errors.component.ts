@@ -35,6 +35,7 @@ export class ErrorsComponent implements OnInit {
   selection: SelectionModel<Payment> = new SelectionModel<Payment>(true, []);
   exportSheetName: string = 'Feuille1';
   exportFileName: string = 'erreur-libellés';
+  ratio: number;
 
   isLoading = false;
 
@@ -103,8 +104,11 @@ export class ErrorsComponent implements OnInit {
       },
       include: ['debts']
     }).subscribe((payments: Payment[]) => {
+      const total = payments.length;
       this.payments = payments.filter(payment => !this.labelValidator.isValid(payment.label));
       this.tableDataSource.data = this.payments;
+
+      this.ratio = Math.round(this.payments.length / total * 100);
 
       this.isLoading = false;
     });

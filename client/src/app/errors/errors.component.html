@@ -4,6 +4,8 @@
   <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
 </mat-form-field>
 
+<h3>{{ ratio }}% de virements en erreur</h3>
+
 <div *ngIf="isLoading" class="spinner-wrapper">
   <mat-progress-spinner class="spinner"
     color="primary"
