@@ -3,6 +3,16 @@
   Revenir à la liste
 </button>
 
+<mat-form-field>
+  <mat-label>Période</mat-label>
+  <mat-select [(ngModel)]="periodValue" (selectionChange)="applyPeriod()">
+    <mat-option *ngIf="period !== null" [value]="null">--Aucune</mat-option>
+    <mat-option *ngFor="let period of periods" [value]="period.value">
+      {{ period.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
 <mat-card id="account">
   <mat-grid-list cols="3" rowHeight = "40px">
     <mat-grid-tile id="title" [colspan] = "3" [rowspan] = "1">

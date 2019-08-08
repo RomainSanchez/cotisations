@@ -20,7 +20,8 @@ import {
   MatGridListModule,
   MatListModule,
   MatTooltipModule,
-  MatDatepickerModule
+  MatDatepickerModule,
+  MatSelectModule
 } from '@angular/material';
 
 @NgModule({
@@ -45,7 +46,8 @@ import {
     MatListModule,
     MatTooltipModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    MatSelectModule
   ],
   exports: [
     MatButtonModule,
@@ -67,7 +69,8 @@ import {
     MatListModule,
     MatTooltipModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    MatSelectModule
   ]
 })
 export class MaterialComponentsModule { }

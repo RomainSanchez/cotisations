@@ -48,6 +48,21 @@ export class AccountComponent implements OnInit {
     'amount',
     'payments'
   ];
+  periods: Period[] = [
+    {name: 'Janvier', value: '01'},
+    {name: 'Février', value: '02'},
+    {name: 'Mars', value: '03'},
+    {name: 'Avril', value: '04'},
+    {name: 'Mai', value: '05'},
+    {name: 'Juin', value: '06'},
+    {name: 'Juillet', value: '07'},
+    {name: 'Aout', value: '08'},
+    {name: 'Septembre', value: '09'},
+    {name: 'Octobre', value: '10'},
+    {name: 'Novembre', value: '11'},
+    {name: 'Décembre', value: '12'},
+  ]
+  periodValue: string = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -104,7 +119,34 @@ export class AccountComponent implements OnInit {
     return count;
   }
 
+  applyPeriod() {
+    if(this.periodValue !== null) {
+      this.debtDataSource.data = this.debts.filter((debt: Debt) => {
+        const debtMonth = debt.date.split('/')[0];
+
+        return parseInt(debtMonth) === parseInt(this.periodValue);
+      });
+
+      this.paidDebtDataSource.data = this.paidDebts.filter((debt: Debt) => {
+        const debtMonth = debt.date.split('/')[0];
+
+        return parseInt(debtMonth) === parseInt(this.periodValue);
+      });
+
+      this.computeTotals();
+
+      return;
+    }
+
+    this.debtDataSource.data = this.debts;
+    this.paidDebtDataSource.data = this.paidDebts;
+    this.computeTotals();
+  }
+
   private getDebts() {
+    this.debts = [];
+    this.paidDebts = [];
+
     this.debtApi.find({
       include: ['payments'],
       where: {
@@ -112,7 +154,7 @@ export class AccountComponent implements OnInit {
       }
     }).subscribe((debts: Debt[]) => {
       this.sortDebts(debts);
-      this.computeTotals();
+      this.applyPeriod();
     });
   }
 
@@ -120,10 +162,7 @@ export class AccountComponent implements OnInit {
     payment.disbursedAt = new Date().toString();
 
     this.paymentApi.replaceOrCreate(payment).subscribe(() => {
-      this.snackBar.open('Décaissement effectué', null, {
-        duration: 2000,
-      //  verticalPosition: 'top'
-      });
+      this.snackBar.open('Décaissement effectué', null, {duration: 2000});
       this.getDebts();
     });
   }
@@ -138,19 +177,20 @@ export class AccountComponent implements OnInit {
 
       this.debts.push(debt);
     });
-
-    this.debtDataSource.data = this.debts;
-    this.paidDebtDataSource.data = this.paidDebts;
   }
 
   private computeTotals(): void {
     let paymentsTotal: number;
 
-    this.debts.forEach((debt: Debt) => {
+    this.debtTotal = 0;
+    this.paidTotal = 0;
+    this.disbursedTotal = 0;
+
+    this.debtDataSource.data.forEach((debt: Debt) => {
       this.debtTotal += parseFloat(debt.amount);
     });
 
-    this.paidDebts.forEach((debt: Debt) => {
+    this.paidDebtDataSource.data.forEach((debt: Debt) => {
       paymentsTotal = 0;
 
       debt.payments.forEach((payment: Payment) => {
@@ -165,4 +205,9 @@ export class AccountComponent implements OnInit {
     });
   }
 
+}
+
+export interface Period {
+  name: string;
+  value: string;
 }
