@@ -10,12 +10,19 @@
 
   mat-card#matches
     max-width: 40%
+    min-width: 30%
     margin-top: 30px
     margin-bottom: 30px
     position: fixed
     z-index: 999
     margin-top: 14px
     top: 0
+
+    #selected-debts mat-cell
+      color: #FF4081
+
+    #selected-payments mat-cell
+      color: #45A2A2
 
     .payment-label
       width: 400px
@@ -27,17 +34,28 @@
     li
       list-style-type: none
 
-    span.total
-      color: #3f51b5
-      margin-left: 5px
-      font-size: 2em
+    #validate, #clear
+      font-size: 1.5em
+      cursor: pointer
+      vertical-align: -9px
 
     #validate
-      font-size: 3.5em
-      cursor: pointer
+      margin-left: 220px
 
     p
       margin-top: 20px
+
+    span
+      &.operator
+        font-size: 2em
+        vertical-align: -5px
+        margin: 5px
+
+      &.negative
+        color: #FF4081
+
+    .positive
+      color: #45A2A2
 
     #clear
       float: right
@@ -56,3 +74,5 @@
     ::ng-deep .as-split-gutter
       height: 600px
       margin-top: 118px
+
+

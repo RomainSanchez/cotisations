@@ -1,13 +1,25 @@
 <div id="match">
   <mat-card id="matches" ngDraggable *ngIf="debts.length > 0 || payments.length > 0">
-      <mat-card-title>Rapprochement</mat-card-title>
+      <mat-card-title>
+        Rapprochement
+        <mat-icon mat-button id="validate" class="mat-18" color="accent"
+          *ngIf="payments.length && debts.length"
+          (click)="openConfirmationDialog()"
+          matTooltip="Valider le rapprochement"
+        >check</mat-icon>
+        <mat-icon mat-button id="clear" class="mat-18" color="accent"
+          (click)="clear()"
+          matTooltip="Annuler"
+        >clear</mat-icon>
+      </mat-card-title>
+
       <mat-divider></mat-divider>
 
       <mat-card-content id="selected-debts">
         <p *ngIf="debts.length == 0">Aucune déclaration sélectionnée</p>
         <mat-table *ngIf="debts.length > 0" class="match-debts-table" matSort [dataSource]="debtDataSource">
             <ng-container matColumnDef="date">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Date d'encaissement</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Période</mat-header-cell>
                 <mat-cell *matCellDef="let debt">{{debt.date}}</mat-cell>
             </ng-container>
 
@@ -75,30 +87,26 @@
 
       <mat-card-content id="balance">
           <div class="total">
-              <span class="mat-18" color="primary">=</span>
-              <p id="total">{{ balance | number: '1.2-2' }} €</p>
+              <h4 id="total">
+                {{ paymentTotal | number: '1.2-2' }}€ encaissés
+                <span class="operator"> - </span>
+                {{ debtTotal | number: '1.2-2' }}€ déclarés
+                 <span class="operator">=</span>
+                <span class="balance" [ngClass]="balance >= 0 ? 'positive': 'negative'">{{ balance | number: '1.2-2' }} €</span>
+              </h4>
           </div>
-          <mat-icon mat-button id="validate" class="mat-18" color="accent"
-            *ngIf="payments.length && debts.length"
-            (click)="openConfirmationDialog()"
-            mat-tooltip="Valider le rapprochement"
-            tooltip-position="below"
-          >check_circle</mat-icon>
-          <mat-icon mat-button id="clear" class="mat-18" color="accent"
-            (click)="clear()"
-          >clear</mat-icon>
       </mat-card-content>
   </mat-card>
 
   <div id="lists">
       <as-split unit="percent" [direction]="horizontal" #split="asSplit" gutterSize="20" >
-        <as-split-area size="50" #debtPanel="asSplitArea">
+        <as-split-area size="55" #debtPanel="asSplitArea">
           <h2 class="mat-display-1">Déclarations</h2>
             <div id="debts" class="column">
                 <app-debts #debtsComponent (matchDebts)="debtSelected($event)"></app-debts>
               </div>
         </as-split-area>
-        <as-split-area size="50" #paymentPanel="asSplitArea">
+        <as-split-area size="45" #paymentPanel="asSplitArea">
           <h2 class="mat-display-1">Virements</h2>
             <div id="payments" class="column">
                 <app-payments #paymentsComponent (matchPayments)="paymentSelected($event)"></app-payments>

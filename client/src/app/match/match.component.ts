@@ -22,6 +22,8 @@ export class MatchComponent implements OnInit {
   @ViewChild(MatSort) paymentSort: MatSort;
   debts: Debt[] = [];
   payments: Payment[] = [];
+  debtTotal: number;
+  paymentTotal: number;
   balance: number;
   debtColumns: string[] = [
     'date',
@@ -101,18 +103,18 @@ export class MatchComponent implements OnInit {
   }
 
   public computeTotal() {
-    let debtTotal: number = 0;
-    let paymentTotal: number = 0;
+    this.debtTotal = 0;
+    this.paymentTotal = 0;
 
     this.debts.forEach(debt => {
-      debtTotal += parseFloat(debt.amount);
+      this.debtTotal += parseFloat(debt.amount);
     });
 
     this.payments.forEach(payment => {
-      paymentTotal += parseFloat(payment.credit);
+      this.paymentTotal += parseFloat(payment.credit);
     });
 
-    this.balance = debtTotal - paymentTotal;
+    this.balance = this.paymentTotal - this.debtTotal;
   }
 
   public clear() {
