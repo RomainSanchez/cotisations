@@ -41,6 +41,7 @@ export class PaymentsComponent implements OnInit {
 
   ngOnInit() {
     this.getPayments();
+    this.tableDataSource.filterPredicate = this.filter;
   }
 
   ngAfterViewInit() {
@@ -94,10 +95,6 @@ export class PaymentsComponent implements OnInit {
     this.getPayments();
   }
 
-  removeLast() {
-    this.selectedPayments.pop();
-  }
-
   private getPayments() {
     this.isLoading = true;
 
@@ -107,6 +104,27 @@ export class PaymentsComponent implements OnInit {
 
       this.isLoading = false;
     });
+  }
+
+  private filter(payment: Payment, filters) {
+    const matchFilter = [];
+    const filterArray = filters.split('+');
+
+    delete payment.debts;
+    delete payment.id;
+
+    const fields = Object.values(payment).filter(Boolean);
+
+    filterArray.forEach(filter => {
+      const customFilter = [];
+
+      fields.forEach(field => {
+        customFilter.push(field.toLowerCase().includes(filter))
+      });
+      matchFilter.push(customFilter.some(Boolean));
+    });
+
+    return matchFilter.every(Boolean);
   }
 
 }

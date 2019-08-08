@@ -48,6 +48,8 @@ export class DebtsComponent implements OnInit {
   ngOnInit() {
     this.getDebts();
     moment.locale('fr');
+
+    this.tableDataSource.filterPredicate = this.filter;
   }
 
   ngAfterViewInit() {
@@ -60,8 +62,6 @@ export class DebtsComponent implements OnInit {
       }
     };
     this.tableDataSource.sort = this.sort;
-    // Allow filtering on nested property debt.community.label
-    this.tableDataSource.filterPredicate = this.filter;
   }
 
   updateDebts() {
@@ -74,7 +74,7 @@ export class DebtsComponent implements OnInit {
 
   doFilter (value: string) {
     if(value !== 'DATE_RANGE_NO_FILTER') {
-      this.tableDataSource.filter = value.trim().toLocaleLowerCase();
+      this.tableDataSource.filter = value.trim().toLowerCase();
 
       return;
     }
@@ -133,19 +133,38 @@ export class DebtsComponent implements OnInit {
     });
   }
 
-  private filter = (debt: Debt, filter: any) => {
-    const debtAsString = JSON.stringify(Object.values(debt));
+  private filter = (debt: Debt, filters: any) => {
+    const matchFilter = [];
+    const filterArray = filters.split('+');
+    const columns = [
+      debt.agirheCode,
+      debt.amount,
+      debt.basis,
+      debt.community.label,
+      debt.community.siret,
+      debt.date,
+      debt.type
+    ];
     const debtDate = moment(debt.date, 'DD/MM/YYYY');
+
+    filterArray.forEach(filter => {
+      const customFilter = [];
+
+      columns.forEach(column => {
+        customFilter.push(column.toLowerCase().includes(filter))
+      });
+      matchFilter.push(customFilter.some(Boolean));
+    });
 
     if(this.fromDate !== undefined) {
       return debtDate.isSameOrAfter(this.fromDate)
         && debtDate.isSameOrBefore(this.toDate)
-        && debtAsString.toLowerCase().indexOf(filter) != -1
+        && matchFilter.every(Boolean)
       ;
     }
 
     return debtDate.isBefore(this.toDate)
-        && debtAsString.toLowerCase().indexOf(filter) != -1;
+        && matchFilter.every(Boolean);
   }
 
 }
