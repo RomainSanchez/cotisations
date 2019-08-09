@@ -1,30 +1,42 @@
 'use strict';
 
-const csvToJson = require("csvtojson");
+const xlsx = require('xlsx');
+const multiparty = require('multiparty');
 
 module.exports = function(Payment) {
-    Payment.fromCsv = async (data, callback) => {
-        const csv = Object.keys(data)[0];
+    Payment.fromCsv = async (req, callback) => {
+        const parseForm = (req) => new Promise((resolve, reject) => {
+            const form = new multiparty.Form();
 
-        const rows = await csvToJson().fromString(csv);
+            form.parse(req, (err, fields, files) => {
+                if(err) return reject(err);
 
-        for(const row of rows) {
+                return resolve(files.file[0]);
+            });
+        });
+
+        const file = await parseForm(req);
+        const xls = xlsx.readFile(file.path);
+        const rows = xlsx.utils.sheet_to_json(xls.Sheets[xls.SheetNames[0]]);
+
+        for (const row of rows) {
+            if(row.__EMPTY_2 || !row.__EMPTY_3) {
+                continue;
+            }
+
             const payment = {
-                date: row.Date,
-                valueDate: row.Valeur,
-                debit: row.Débit.replace(' ', '').replace(',', '.'),
-                credit: row.Crédit.replace(' ', '').replace(',', '.'),
-                label: row.Libellé
+                date: row.__EMPTY,
+                valueDate: row[' Relevé des opérations des 60 derniers jours '],
+                label: row.__EMPTY_1,
+                credit: row.__EMPTY_3.replace(' ', '').replace(',', '.')
             };
 
-            if (!isValid(payment) || await exists(payment)) {
+            if (await exists(payment)) {
                 continue;
             }
 
             await Payment.create(payment);
         }
-
-        callback(null, 'ok');
     };
 
     Payment.getMatched = async (callback) => {
@@ -57,11 +69,11 @@ module.exports = function(Payment) {
             verb: 'post'
         },
         accepts: [
-            {arg: 'data', type: 'object', http: {source: 'body'}}
+            { arg: 'req', type: 'object', http: { source: 'req' } },
         ],
         returns: {
             arg: 'response',
-            type: 'object'
+            type: 'string'
         }
     });
 
@@ -96,17 +108,5 @@ module.exports = function(Payment) {
         });
 
         return existing !== null;
-    }
-
-    const isValid = (payment) => {
-        if (payment.label === null || payment.label === '') {
-            return false;
-        }
-
-        if (payment.date === null || payment.date === '') {
-            return false;
-        }
-
-        return true;
     }
 };

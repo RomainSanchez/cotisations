@@ -1,6 +1,6 @@
 'use strict';
 
-const util = require('util');
+const promisify = require('util').promisify;
 const soapClient = require('../soap-client');
 const communityParser = require('../parser/community-parser');
 
@@ -14,7 +14,7 @@ async function importCommunities (app) {
     const config = app.get('app');
     const client = await new soapClient.client(config.soap.url).getInstance();
     // Promisify callback based soap function
-    const getCommunities = util.promisify(client.ListeCollectivite);
+    const getCommunities = promisify(client.ListeCollectivite);
 
     // GET COMMUNITIES
     let communities = await getCommunities(config.soap.services.listeCollectivites.data);

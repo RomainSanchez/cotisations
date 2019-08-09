@@ -16,22 +16,22 @@ export class CsvUploadComponent {
   upload(file: any) {
     this.uploadStarted.emit(true);
 
-    const reader: FileReader = new FileReader();
+    const headers = (headers) => {
+     headers.append('Content-Type', 'multipart/form-data');
+    };
 
-    reader.readAsText(file);
+    let data = new FormData();
 
-    reader.onload = () => {
-      this.paymentApi.fromCsv(reader.result, () => {
-         return new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-      }).subscribe(
-        res => {
-          this.uploadDone.emit(true);
-        },
-        error => {
-          this.uploadDone.emit(false);
-        }
-      );
-    }
+    data.append('file', file);
+
+    this.paymentApi.fromCsv(data, headers).subscribe(
+      res => {
+        this.uploadDone.emit(true);
+      },
+      error => {
+        this.uploadDone.emit(false);
+      }
+    );
   }
 
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-const util = require('util');
+const promisify = require('util').promisify;
 const SoapClient = require('../soap-client');
 const debtParser = require('../parser/debt-parser');
 
@@ -21,7 +21,7 @@ async function importDebts (app) {
     const config = app.get('app');
     const client = await new SoapClient.client(config.soap.url).getInstance();
     // Promisify callback based soap function
-    const getDebts = util.promisify(client.RecapCotis);
+    const getDebts = promisify(client.RecapCotis);
 
     // GET DEBTS
     let params = config.soap.services.recapCotis.data;
