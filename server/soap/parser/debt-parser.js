@@ -5,7 +5,7 @@ module.exports = {
         const regexOblig = new RegExp('^M([0-9]){1,2}_A([1-3]){1}_Oblig');
         const debts = [];
         const year = new Date().getFullYear();
-
+console.log(raw.length);
         raw.forEach((rawDebt) => {
             // Remove unused property
             delete rawDebt.attributes;

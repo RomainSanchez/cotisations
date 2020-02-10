@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
 import { Moment } from 'moment';
@@ -13,7 +13,7 @@ import { LabelValidatorService } from '../services/label-validator.service';
   templateUrl: './payments.component.html',
   styleUrls: ['./payments.component.sass']
 })
-export class PaymentsComponent implements OnInit {
+export class PaymentsComponent implements OnInit, AfterViewInit {
   @Output() matchPayments = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -30,9 +30,9 @@ export class PaymentsComponent implements OnInit {
   fromDate: Moment;
   toDate: Moment = moment();
 
-  private tableDataSource: MatTableDataSource<Payment>;
-  private payments: Payment[];
-  private selectedPayments: Payment[] = [];
+  tableDataSource: MatTableDataSource<Payment>;
+  payments: Payment[];
+  selectedPayments: Payment[] = [];
 
   isLoading = false;
 
@@ -54,14 +54,14 @@ export class PaymentsComponent implements OnInit {
     this.tableDataSource.sort = this.sort;
   }
 
-  doFilter (value: string): void {
+  doFilter(value: string): void {
     this.tableDataSource.filter = value.trim().toLocaleLowerCase();
   }
 
   rowClicked(payment: Payment): void {
-    let key:number = this.isPaymentSelected(payment);
+    const key: number = this.isPaymentSelected(payment);
 
-    if(key !== -1 ) {
+    if (key !== -1 ) {
       delete this.selectedPayments[key];
 
       this.selectedPayments = this.selectedPayments.filter((thePayment) => {
@@ -83,10 +83,10 @@ export class PaymentsComponent implements OnInit {
   }
 
   isPaymentSelected(payment: Payment): number {
-    let key: number = -1;
+    let key = -1;
 
     this.selectedPayments.forEach((thePayment, theKey) => {
-      if(thePayment.id === payment.id) {
+      if (thePayment.id === payment.id) {
         key = theKey;
       }
     });
@@ -108,12 +108,12 @@ export class PaymentsComponent implements OnInit {
     this.tableDataSource.data = this.payments.filter((payment: Payment) => {
       const date = moment(payment.date, 'DD/MM/YYYY');
 
-      if(this.fromDate) {
+      if (this.fromDate) {
         return date.isSameOrAfter(this.fromDate) &&
           date.isSameOrBefore(this.toDate);
       }
 
-      if(this.toDate) {
+      if (this.toDate) {
         return date.isSameOrBefore(this.toDate);
       }
     });
@@ -135,7 +135,6 @@ export class PaymentsComponent implements OnInit {
     const filterArray = filters.split('+');
 
     delete payment.debts;
-    delete payment.id;
 
     const fields = Object.values(payment).filter(Boolean);
 
@@ -143,7 +142,9 @@ export class PaymentsComponent implements OnInit {
       const customFilter = [];
 
       fields.forEach(field => {
-        customFilter.push(field.toLowerCase().includes(filter))
+        if (typeof field === 'string') {
+          customFilter.push(field.toLowerCase().includes(filter));
+        }
       });
       matchFilter.push(customFilter.some(Boolean));
     });

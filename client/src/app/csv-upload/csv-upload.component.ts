@@ -16,15 +16,11 @@ export class CsvUploadComponent {
   upload(file: any) {
     this.uploadStarted.emit(true);
 
-    const headers = (headers) => {
-     headers.append('Content-Type', 'multipart/form-data');
-    };
-
-    let data = new FormData();
+    const data = new FormData();
 
     data.append('file', file);
 
-    this.paymentApi.fromCsv(data, headers).subscribe(
+    this.paymentApi.fromCsv(data, () => {}).subscribe(
       res => {
         this.uploadDone.emit(true);
       },

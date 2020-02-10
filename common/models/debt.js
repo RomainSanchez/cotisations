@@ -1,9 +1,10 @@
 'use strict';
 
 module.exports = function(Debt) {
-    Debt.getUnmatched = async () => {
+    Debt.getUnmatched = () => {
         const debts = Debt.find({
-            include: ['community', 'payments']
+            include: ['community', 'payments'],
+            limit: 200
         });
 
         return debts.filter(debt => debt.payments().length === 0);

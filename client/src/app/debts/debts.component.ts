@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatTableDataSource, MatPaginator, MatSort, DateAdapter } from '@angular/material';
 
@@ -13,7 +13,7 @@ import * as moment from 'moment';
   templateUrl: './debts.component.html',
   styleUrls: ['./debts.component.sass']
 })
-export class DebtsComponent implements OnInit {
+export class DebtsComponent implements OnInit, AfterViewInit {
   @Output() matchDebts = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -47,7 +47,7 @@ export class DebtsComponent implements OnInit {
     {name: 'Octobre', value: 10},
     {name: 'Novembre', value: 11},
     {name: 'Décembre', value: 12}
-  ]
+  ];
 
   constructor(
     private debtApi: DebtApi,
@@ -69,7 +69,7 @@ export class DebtsComponent implements OnInit {
     this.tableDataSource.paginator = this.paginator;
     // Allow sorting on nested property debt.community.label
     this.tableDataSource.sortingDataAccessor = (debt: Debt, property: string): string|number => {
-      switch(property) {
+      switch (property) {
         case 'community': return debt.community.label;
         default: return debt[property];
       }
@@ -95,13 +95,13 @@ export class DebtsComponent implements OnInit {
 
     // Hack to trigger filter update
     this.tableDataSource.filter = '------';
-    this.tableDataSource.filter = currentFilter !== null ? currentFilter: ' ';
+    this.tableDataSource.filter = currentFilter !== null ? currentFilter : ' ';
   }
 
   rowClicked(debt: Debt) {
-    let key: number = this.isDebtSelected(debt);
+    const key: number = this.isDebtSelected(debt);
 
-    if(key !== -1 ) {
+    if (key !== -1 ) {
       delete this.selectedDebts[key];
 
       this.selectedDebts = this.selectedDebts.filter((theDebt) => {
@@ -115,10 +115,10 @@ export class DebtsComponent implements OnInit {
   }
 
   isDebtSelected(debt: Debt): number {
-    let key: number = -1;
+    let key = -1;
 
     this.selectedDebts.forEach((theDebt, theKey) => {
-      if(theDebt.id === debt.id) {
+      if (theDebt.id === debt.id) {
         key = theKey;
       }
     });
@@ -140,7 +140,7 @@ export class DebtsComponent implements OnInit {
     this.tableDataSource.data = this.debts.filter((debt: Debt) => {
       const debtMonth = parseInt(debt.date.split('/')[0]);
 
-      if(this.fromPeriod !== null) {
+      if (this.fromPeriod !== null) {
         return debtMonth >= this.fromPeriod &&
           debtMonth <= this.toPeriod
         ;
@@ -177,7 +177,7 @@ export class DebtsComponent implements OnInit {
       const customFilter = [];
 
       columns.forEach(column => {
-        customFilter.push(column.toLowerCase().includes(filter))
+        customFilter.push(column.toLowerCase().includes(filter));
       });
       matchFilter.push(customFilter.some(Boolean));
     });

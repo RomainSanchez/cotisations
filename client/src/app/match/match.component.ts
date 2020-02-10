@@ -13,8 +13,8 @@ import { DebtsComponent } from '../debts/debts.component';
   styleUrls: ['./match.component.sass'],
 })
 export class MatchComponent implements OnInit {
-  @ViewChild('paymentsComponent') paymentsComponent: PaymentsComponent
-  @ViewChild('debtsComponent') debtsComponent: DebtsComponent
+  @ViewChild('paymentsComponent') paymentsComponent: PaymentsComponent;
+  @ViewChild('debtsComponent') debtsComponent: DebtsComponent;
   @ViewChild('split') split: SplitComponent;
   @ViewChild('debtPanel') debtPanel: SplitAreaDirective;
   @ViewChild('paymentPanel') paymentPanel: SplitAreaDirective;
@@ -58,7 +58,7 @@ export class MatchComponent implements OnInit {
   public openConfirmationDialog(payment: Payment): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
-      data: "Voulez vous vraiment valider ce rapprochement ?"
+      data: 'Voulez vous vraiment valider ce rapprochement ?'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -68,8 +68,8 @@ export class MatchComponent implements OnInit {
     });
   }
 
-  public debtSelected (debts: Debt[]) {
-    if (this.payments.length < 2 || this.debts.length == 0 || debts.length < this.debts.length) {
+  public debtSelected(debts: Debt[]) {
+    if (this.payments.length < 2 || this.debts.length === 0 || debts.length < this.debts.length) {
       this.debts = debts;
       this.debtDataSource.data = this.debts;
     }
@@ -85,8 +85,8 @@ export class MatchComponent implements OnInit {
     this.computeTotal();
   }
 
-  public paymentSelected (payments: Payment[]) {
-    if (this.payments.length == 0 || this.debts.length < 2 || payments.length < this.payments.length) {
+  public paymentSelected(payments: Payment[]) {
+    if (this.payments.length === 0 || this.debts.length < 2 || payments.length < this.payments.length) {
       this.payments = payments;
       this.paymentDataSource.data = this.payments;
     }
@@ -98,6 +98,7 @@ export class MatchComponent implements OnInit {
 
       this.paymentsComponent.removeLast();
     }
+    console.log(this.payments);
 
     this.computeTotal();
   }
@@ -125,6 +126,8 @@ export class MatchComponent implements OnInit {
   }
 
   private match() {
+    console.log(this.debts);
+    console.log(this.payments);
     this.debts.forEach((debt: Debt) => {
       this.payments.forEach((payment: Payment) => {
         this.debtApi.linkPayments(debt.id, payment.id).subscribe(result => {
@@ -134,7 +137,7 @@ export class MatchComponent implements OnInit {
           });
 
           this.clear();
-        })
+        });
       });
     });
   }

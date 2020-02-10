@@ -23,7 +23,7 @@ export class ErrorsComponent implements OnInit {
   private payments: Payment[];
 
   displayedColumns: any = [
-    //'select',
+    // 'select',
     'date',
     'value',
     'label',

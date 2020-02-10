@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { Payment } from '../shared/sdk/models/index';
 import { PaymentApi } from '../shared/sdk/services/index';
@@ -10,7 +10,7 @@ import { SelectionModel } from '@angular/cdk/collections';
   templateUrl: './matches.component.html',
   styleUrls: ['./matches.component.sass']
 })
-export class MatchesComponent implements OnInit {
+export class MatchesComponent implements OnInit, AfterViewInit {
   @Output() matchPayments = new EventEmitter<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,7 +54,7 @@ export class MatchesComponent implements OnInit {
   public openConfirmationDialog(payment: Payment): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
-      data: "Voulez vous vraiment décaisser ce virement ?"
+      data: 'Voulez vous vraiment décaisser ce virement ?'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -95,7 +95,7 @@ export class MatchesComponent implements OnInit {
     });
   }
 
-  private disburse (payment: Payment): void {
+  private disburse(payment: Payment): void {
     payment.disbursedAt = new Date().toString();
 
     this.paymentApi.replaceOrCreate(payment).subscribe(() => {

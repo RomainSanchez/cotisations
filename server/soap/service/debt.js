@@ -25,7 +25,7 @@ async function importDebts (app) {
 
     // GET DEBTS
     let params = config.soap.services.recapCotis.data;
-
+console.log(params);
     params.sreponse.Annee = new Date().getFullYear();
 
     let debts = await getDebts(params);

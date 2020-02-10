@@ -46,9 +46,7 @@
 
     <ng-container matColumnDef="amount">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Montant</mat-header-cell>
-        <mat-cell class="description-cell"
-                  *matCellDef="let debt">{{debt.amount}}</mat-cell>
-
+        <mat-cell class="description-cell" *matCellDef="let debt">{{debt.amount}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="type">

@@ -31,10 +31,10 @@ export class AccountComponent implements OnInit {
   community: Community;
   debts: Debt[] = [];
   paidDebts: Debt[] = [];
-  debtTotal: number = 0;
-  paidTotal: number = 0;
-  disbursedTotal: number = 0;
-  balance: number = 0;
+  debtTotal = 0;
+  paidTotal = 0;
+  disbursedTotal = 0;
+  balance = 0;
   debtColumns: string[] = [
     'date',
     'basis',
