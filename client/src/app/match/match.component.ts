@@ -62,7 +62,7 @@ export class MatchComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      if (result) {
         this.match();
       }
     });
@@ -126,8 +126,6 @@ export class MatchComponent implements OnInit {
   }
 
   private match() {
-    console.log(this.debts);
-    console.log(this.payments);
     this.debts.forEach((debt: Debt) => {
       this.payments.forEach((payment: Payment) => {
         this.debtApi.linkPayments(debt.id, payment.id).subscribe(result => {

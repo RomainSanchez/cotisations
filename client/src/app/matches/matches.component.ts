@@ -58,7 +58,7 @@ export class MatchesComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      if (result) {
         this.disburse(payment);
       }
     });

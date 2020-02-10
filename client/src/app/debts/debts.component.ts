@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatTableDataSource, MatPaginator, MatSort, DateAdapter } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, DateAdapter, MatDialog, MatSnackBar } from '@angular/material';
 
 import { LoopBackConfig } from '../shared/sdk/lb.config';
 import { Debt } from '../shared/sdk/models/index';
 import { DebtApi } from '../shared/sdk/services/index';
 import { Moment } from 'moment';
 import * as moment from 'moment';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-debts',
@@ -24,7 +25,8 @@ export class DebtsComponent implements OnInit, AfterViewInit {
     'community',
     'basis',
     'type',
-    'amount'
+    'amount',
+    'delete'
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
@@ -52,7 +54,9 @@ export class DebtsComponent implements OnInit, AfterViewInit {
   constructor(
     private debtApi: DebtApi,
     private http: HttpClient,
-    private dateAdapter: DateAdapter<Date>
+    private dateAdapter: DateAdapter<Date>,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
     this.tableDataSource = new MatTableDataSource<Debt>();
     this.dateAdapter.setLocale('fr');
@@ -85,7 +89,7 @@ export class DebtsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  doFilter (value: string) {
+  doFilter(value: string) {
     if(value !== 'DATE_RANGE_NO_FILTER') {
       this.tableDataSource.filter = value.trim().toLowerCase();
 
@@ -147,6 +151,36 @@ export class DebtsComponent implements OnInit, AfterViewInit {
       }
 
       return debtMonth <= this.toPeriod;
+    });
+  }
+
+  openConfirmationDialog(): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: 'Voulez vous vraiment rafraichir les déclarations Agirhes ?'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updateDebts();
+      }
+    });
+  }
+
+  openDeleteConfirmationDialog(debt: Debt) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: 'Voulez vous vraiment supprimer cette déclaration ?'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.debtApi.deleteById(debt.id).subscribe(() => {
+          this.snackBar.open('Déclaration supprimée', null, {
+            duration: 2000,
+          });
+        });
+      }
     });
   }
 

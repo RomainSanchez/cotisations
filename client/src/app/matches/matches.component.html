@@ -59,7 +59,7 @@
 
     <ng-container matColumnDef="disburse">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Décaisser</mat-header-cell>
-        <mat-cell class="disburse-cell" *matCellDef="let payment">
+        <mat-cell class="disburse-cell" *matCellDef="let payment" (click)="$event.stopPropagation()">
           <button
             (click)="openConfirmationDialog(payment)"
             mat-mini-fab

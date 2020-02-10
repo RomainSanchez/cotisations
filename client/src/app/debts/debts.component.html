@@ -21,7 +21,7 @@
   </mat-select>
 </mat-form-field>
 
-<button mat-raised-button color="accent" (click)="updateDebts()">
+<button mat-raised-button color="accent" (click)="openConfirmationDialog()">
     <mat-icon class="mat-18">update</mat-icon>
     Rafraichir les données Agirhe
 </button>
@@ -60,6 +60,20 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Assiette</mat-header-cell>
         <mat-cell class="duration-cell"
                   *matCellDef="let debt">{{debt.basis}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Supprimer</mat-header-cell>
+      <mat-cell class="delete-cell" *matCellDef="let debt" (click)="$event.stopPropagation()">
+        <button
+          (click)="openDeleteConfirmationDialog(debt)"
+          mat-mini-fab
+          color="primary"
+          matTooltip="Supprimer"
+        >
+          <mat-icon class="delete-icon mat-18">delete</mat-icon>
+        </button>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
