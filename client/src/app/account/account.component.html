@@ -33,7 +33,7 @@
 
 <div id="lists">
   <mat-card id="debts">
-    <h3>Déclarations non satisfaites</h3>
+    <h3>Déclarations non rapprochées</h3>
     <h4 class="total"><span>{{ debtTotal| number: '1.2-2' }} €</span> Déclarés</h4>
     <mat-form-field>
       <input matInput type="text" (keyup)="filter($event.target.value, true)" placeholder="Filtrer">
@@ -72,7 +72,7 @@
   </mat-card>
 
   <mat-card id="paid-debts">
-    <h3>Déclarations satisfaites</h3>
+    <h3>Déclarations rapprochées</h3>
     <h4 class="total"><span>{{ paidTotal| number: '1.2-2'  }} €</span> virés</h4>
     <p class="disbursed-total"><span>{{ disbursedTotal| number: '1.2-2' }} €</span> Décaissés</p>
     <mat-form-field>
