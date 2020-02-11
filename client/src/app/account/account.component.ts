@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSort, MatTableDataSource, MatPaginator, MatDialog, MatSnackBar } from '@angular/material';
 import { trigger, state, transition, style, animate } from '@angular/animations';
@@ -20,7 +20,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
     ]),
   ],
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, AfterViewInit {
   @ViewChild('debtSort') debtSort: MatSort;
   @ViewChild('paidDebtSort') paidDebtSort: MatSort;
   @ViewChild('debtPaginator') debtPaginator: MatPaginator;
@@ -94,14 +94,29 @@ export class AccountComponent implements OnInit {
     dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  openConfirmationDialog(payment: Payment): void {
+  openConfirmationDialog(payment: Payment, cancel = false): void {
+    if (cancel) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '350px',
+        data: 'Voulez vous vraiment annuler le décaissement de ce virement ?'
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.cancelDisburse(payment);
+        }
+      });
+
+      return;
+    }
+
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
-      data: "Voulez vous vraiment décaisser ce virement ?"
+      data: 'Voulez vous vraiment décaisser ce virement ?'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      if (result) {
         this.disburse(payment);
       }
     });
@@ -120,17 +135,17 @@ export class AccountComponent implements OnInit {
   }
 
   applyPeriod() {
-    if(this.periodValue !== null) {
+    if (this.periodValue !== null) {
       this.debtDataSource.data = this.debts.filter((debt: Debt) => {
         const debtMonth = debt.date.split('/')[0];
 
-        return parseInt(debtMonth) === parseInt(this.periodValue);
+        return parseInt(debtMonth, 10) === parseInt(this.periodValue, 10);
       });
 
       this.paidDebtDataSource.data = this.paidDebts.filter((debt: Debt) => {
         const debtMonth = debt.date.split('/')[0];
 
-        return parseInt(debtMonth) === parseInt(this.periodValue);
+        return parseInt(debtMonth, 10) === parseInt(this.periodValue, 10);
       });
 
       this.computeTotals();
@@ -158,12 +173,20 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  private disburse (payment: Payment): void {
+  private disburse(payment: Payment): void {
     payment.disbursedAt = new Date().toString();
 
     this.paymentApi.replaceOrCreate(payment).subscribe(() => {
       this.snackBar.open('Décaissement effectué', null, {duration: 2000});
       this.getDebts();
+    });
+  }
+
+  private cancelDisburse(payment: Payment): void {
+    payment.disbursedAt = null;
+
+    this.paymentApi.replaceOrCreate(payment).subscribe(() => {
+      this.snackBar.open('Décaissement annulé', null, {duration: 2000});
     });
   }
 
@@ -194,7 +217,7 @@ export class AccountComponent implements OnInit {
       paymentsTotal = 0;
 
       debt.payments.forEach((payment: Payment) => {
-        if(payment.disbursedAt !== null) {
+        if (payment.disbursedAt !== null) {
           this.disbursedTotal += parseFloat(payment.credit);
         }
 

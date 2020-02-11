@@ -1,4 +1,127 @@
-<h2 class="mat-display-1">Virements rapprochés</h2>
+<mat-card id="paid-debts">
+  <h3>Déclarations rapprochées</h3>
+
+  <mat-form-field>
+    <input matInput type="text" (keyup)="filter($event.target.value, false)" placeholder="Filtrer">
+  </mat-form-field>
+
+  <mat-table class="debts-table"
+    #paidDebtSort="matSort"
+    matSort
+    [dataSource]="paidDebtDataSource"
+    multiTemplateDataRows
+  >
+    <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Période</mat-header-cell>
+        <mat-cell *matCellDef="let debt">{{ debt.date }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="community">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Collectivité</mat-header-cell>
+        <mat-cell *matCellDef="let debt">{{ debt.community.label }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="total">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Total viré</mat-header-cell>
+      <mat-cell *matCellDef="let debt">{{ getPaidTotal(debt) }} €</mat-cell>
+
+    </ng-container>
+
+    <ng-container matColumnDef="payments">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Décaissés</mat-header-cell>
+      <mat-cell *matCellDef="let debt">{{ disbursedStatus(debt.payments) }} / {{ debt.payments.length }}</mat-cell>
+    </ng-container>
+
+    <!-- Column used to display details-->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let debt" [attr.colspan]="paidDebtColumns.length">
+        <div class="payments-container"
+          [@detailExpand]="debt == expandedElement ? 'expanded' : 'collapsed'"
+        >
+          <mat-list class="payments">
+            <mat-list-item *ngFor="let payment of debt.payments">
+              <h4 class="label" mat-line>{{ payment.label }}</h4>
+              <p mat-line> {{ payment.credit }}€  Versé le {{ payment.date }}</p>
+              <div class="disbursed" *ngIf="payment.disbursedAt !== null">
+                <p>{{ payment.disbursedAt| date:'dd/MM/y' }}</p>
+              </div>
+              <div class="disbursed" *ngIf="payment.disbursedAt === null">
+                <button
+                  (click)="openConfirmationDialog(payment)"
+                  mat-button
+                  matRipple
+                  [matRippleCentered]="true"
+                  [matRippleUnbounded]="false"
+                  color="accent"
+                  matTooltip="Décaisser"
+                >
+                    <mat-icon>check_circle</mat-icon>
+                </button>
+              </div>
+              <div class="cancel" *ngIf="payment.disbursedAt !== null">
+                <button
+                  (click)="openConfirmationDialog(payment, true)"
+                  mat-button
+                  matRipple
+                  [matRippleCentered]="true"
+                  [matRippleUnbounded]="false"
+                  color="primary"
+                  matTooltip="Annuler le décaissement"
+                >
+                    <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cancelMatch">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Annuler</mat-header-cell>
+      <mat-cell class="cancel-match-cell" *matCellDef="let debt" (click)="$event.stopPropagation()">
+        <button
+          (click)="openMatchConfirmationDialog(debt)"
+          mat-mini-fab
+          color="primary"
+          matTooltip="Annuler le rapprochement"
+        >
+          <mat-icon class="delete-icon mat-18">cancel</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="disburseAll">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Décaisser Tout</mat-header-cell>
+      <mat-cell class="disburse-match-cell" *matCellDef="let debt" (click)="$event.stopPropagation()">
+        <button
+          (click)="openDisburseAllConfirmationDialog(debt)"
+          mat-mini-fab
+          color="accent"
+          matTooltip="Décaisser les virements"
+        >
+          <mat-icon class="delete-icon mat-18">check_circle</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="paidDebtColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let debt; columns: paidDebtColumns"
+      class="debt-row"
+      [class.expanded]="expandedElement === debt"
+      (click)="expandedElement = expandedElement === debt ? null : debt"
+    ></mat-row>
+
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="payments-row"></mat-row>
+
+  </mat-table>
+
+  <mat-paginator #paidDebtPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</mat-card>
+
+
+<!-- <h2 class="mat-display-1">Virements rapprochés</h2>
 
 <mat-form-field>
   <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrer">
@@ -80,4 +203,4 @@
 
 </mat-table>
 
-<mat-paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+<mat-paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator> -->

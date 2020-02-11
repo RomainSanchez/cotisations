@@ -137,6 +137,19 @@
                         <mat-icon>check_circle</mat-icon>
                     </button>
                   </div>
+                  <div class="cancel" *ngIf="payment.disbursedAt !== null">
+                    <button
+                      (click)="openConfirmationDialog(payment, true)"
+                      mat-button
+                      matRipple
+                      [matRippleCentered]="true"
+                      [matRippleUnbounded]="false"
+                      color="accent"
+                      matTooltip="Annuler le décaissement"
+                    >
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                  </div>
                 </mat-list-item>
               </mat-list>
             </div>

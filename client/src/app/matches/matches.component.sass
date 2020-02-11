@@ -1,2 +1,56 @@
 button
   float: right
+
+mat-card, #back
+  margin-top: 15px
+
+#title
+    font-size: 1.5em
+
+#lists
+  display: flex;
+  flex-direction: row
+  justify-content: space-between
+
+#paid-debts
+  flex-grow: 1
+  width: 100%
+  margin: 5px;
+
+.payments-row
+  min-height: 0
+  border-bottom-width: 0
+
+  .mat-cell
+    width: 100%
+
+.mat-cell, .mat-cell.cdk-column-expandedDetail
+  border-bottom-width: 0
+
+.debt-row
+  &:not(.expanded):hover
+    background: #B4BBC5
+  &.expanded
+    background: #45A2A2
+
+.payments-container
+  overflow: hidden
+  display: flex
+  width: 100%
+
+  mat-list
+    width: 100%
+
+    .disbursed
+      width: 30%
+
+      p, button
+        margin-left: 40px
+
+
+  .mat-list-base .mat-list-item .mat-list-text
+    width: 70%
+
+  mat-icon
+    float: right
+
