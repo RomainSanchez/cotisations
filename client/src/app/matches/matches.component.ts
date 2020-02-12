@@ -204,7 +204,9 @@ export class MatchesComponent implements OnInit, AfterViewInit {
 
   private disburseAll(debt: Debt) {
     debt.payments.forEach((payment: Payment) => {
-      this.disburse(payment);
+      if (payment.disbursedAt === null) {
+        this.disburse(payment);
+      }
     });
   }
 
