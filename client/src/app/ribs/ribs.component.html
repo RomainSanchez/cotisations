@@ -57,18 +57,32 @@
                 *matCellDef="let payment">{{payment.credit}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="disburse">
+    <ng-container matColumnDef="delete">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Supprimer</mat-header-cell>
-        <mat-cell class="disburse-cell" *matCellDef="let payment" (click)="$event.stopPropagation()">
+        <mat-cell class="delete-cell" *matCellDef="let payment" (click)="$event.stopPropagation()">
           <button
             (click)="openConfirmationDialog(payment)"
             mat-mini-fab
             color="accent"
             matTooltip="Supprimer"
           >
-            <mat-icon class="disburse-icon mat-18">cancel</mat-icon>
+            <mat-icon class="delete-icon mat-18">cancel</mat-icon>
           </button>
         </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="cancel">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Annuler</mat-header-cell>
+      <mat-cell class="delete-cell" *matCellDef="let payment" (click)="$event.stopPropagation()">
+        <button
+          (click)="cancel(payment)"
+          mat-mini-fab
+          color="accent"
+          matTooltip="Annuler"
+        >
+          <mat-icon class="delete-icon mat-18">arrow_back</mat-icon>
+        </button>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

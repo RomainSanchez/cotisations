@@ -22,7 +22,8 @@ export class UnknownComponent implements OnInit, AfterViewInit {
     'value',
     'label',
     'credit',
-    'disburse'
+    'delete',
+    'cancel'
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
@@ -79,6 +80,14 @@ export class UnknownComponent implements OnInit, AfterViewInit {
       this.selection.clear() :
       this.tableDataSource.data.forEach(row => this.selection.select(row))
     ;
+  }
+
+  public cancel(payment: Payment) {
+    payment.unknown = false;
+
+    this.paymentApi.replaceById(payment.id, payment).subscribe(() => {
+      this.getPayments();
+    });
   }
 
   private getPayments(): void {
