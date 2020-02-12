@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 
 import { Moment } from 'moment';
 import * as moment from 'moment';
@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { Payment } from '../shared/sdk/models/index';
 import { PaymentApi } from '../shared/sdk/services/index';
 import { LabelValidatorService } from '../services/label-validator.service';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-payments',
@@ -23,7 +24,9 @@ export class PaymentsComponent implements OnInit, AfterViewInit {
     'date',
     'value',
     'label',
-    'credit'
+    'credit',
+    'unknown',
+    'rib'
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
@@ -38,8 +41,9 @@ export class PaymentsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private paymentApi: PaymentApi,
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar,
     private labelValidator: LabelValidatorService
-
   ) {
     this.tableDataSource = new MatTableDataSource<Payment>();
   }
@@ -116,6 +120,41 @@ export class PaymentsComponent implements OnInit, AfterViewInit {
       if (this.toDate) {
         return date.isSameOrBefore(this.toDate);
       }
+    });
+  }
+
+  openUnknownConfirmationDialog(payment: Payment): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: 'Voulez vous vraiment marquer ce virement comme à vérifier ?'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updatePayment(payment, 'unknown');
+      }
+    });
+  }
+
+  openRibConfirmationDialog(payment: Payment): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: 'Voulez vous vraiment marquer ce virement comme mauvais RIB ?'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updatePayment(payment, 'rib');
+      }
+    });
+  }
+
+  private updatePayment(payment: Payment, property: string) {
+    payment[property] = true;
+
+    this.paymentApi.replaceById(payment.id, payment).subscribe(() => {
+      this.snackbar.open('Virement marqué', null, {duration: 2000});
+      this.getPayments();
     });
   }
 

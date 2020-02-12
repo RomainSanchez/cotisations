@@ -55,6 +55,36 @@
       <mat-cell class="credit-cell" *matCellDef="let payment">{{payment.credit}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="unknown">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>A vérifier</mat-header-cell>
+      <mat-cell class="unknown-cell" *matCellDef="let payment" (click)="$event.stopPropagation()">
+        <button
+          *ngIf="!payment.rib"
+          (click)="openUnknownConfirmationDialog(payment)"
+          mat-mini-fab
+          color="primary"
+          matTooltip="A vérifier"
+        >
+          <mat-icon class="unknown-icon mat-18">not_listed_location</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="rib">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Mauvais RIB</mat-header-cell>
+      <mat-cell class="rib-cell" *matCellDef="let payment" (click)="$event.stopPropagation()">
+        <button
+          *ngIf="!payment.unknown"
+          (click)="openRibConfirmationDialog(payment)"
+          mat-mini-fab
+          color="primary"
+          matTooltip="Mauvais RIB"
+        >
+          <mat-icon class="rib-icon mat-18">report</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
     <mat-row

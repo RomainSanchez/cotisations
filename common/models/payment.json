@@ -30,6 +30,14 @@
     },
     "disbursedAt": {
       "type": "string"
+    },
+    "rib": {
+      "type": "boolean",
+      "default": false
+    },
+    "unknown": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

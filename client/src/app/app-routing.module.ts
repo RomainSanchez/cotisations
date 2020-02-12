@@ -6,6 +6,8 @@ import { MatchesComponent } from './matches/matches.component';
 import { AccountComponent } from './account/account.component';
 import { CommunityResolver } from './account/community-resolver.service';
 import { ErrorsComponent } from './errors/errors.component';
+import { RibsComponent } from './ribs/ribs.component';
+import { UnknownComponent } from './unknown/unknown.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/communities', pathMatch: 'full'},
@@ -13,6 +15,8 @@ const routes: Routes = [
   { path: 'match', component: MatchComponent },
   { path: 'matches', component: MatchesComponent },
   { path: 'errors', component: ErrorsComponent },
+  { path: 'ribs', component: RibsComponent },
+  { path: 'unknown', component: UnknownComponent },
   { path: 'account/:communityId',
     component: AccountComponent,
     resolve: {community: CommunityResolver}

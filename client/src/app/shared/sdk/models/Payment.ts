@@ -15,6 +15,8 @@ export interface PaymentInterface {
   "disbursedAt"?: string;
   "id"?: number;
   "importId"?: number;
+  "unknown": boolean;
+  "rib": boolean;
   import?: Import;
   debts?: Debt[];
 }
@@ -29,6 +31,8 @@ export class Payment implements PaymentInterface {
   "disbursedAt": string;
   "id": number;
   "importId": number;
+  "unknown": boolean;
+  "rib": boolean;
   import: Import;
   debts: Debt[];
   constructor(data?: PaymentInterface) {

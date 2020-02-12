@@ -72,29 +72,6 @@ export class CommunitiesComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/account', communityId]);
   }
 
-  export() {
-    const data = [];
-    const format = 'DD/MM/YYYY';
-
-    this.paidDebtDataSource.data.forEach((debt: Debt) => {
-      debt.payments.forEach((payment: Payment) => {
-        if (payment.disbursedAt !== null) {
-          console.log(moment(payment.disbursedAt).format('D/M/YYYY'))
-          data.push({
-            Période: debt.date,
-            Collectivité: debt.community.label,
-            Montant: payment.credit,
-            'Date d\'encaissement': moment(payment.date).format(format),
-            'Date de valeur': moment(payment.valueDate).format(format),
-            'Date de décaissement': moment(payment.disbursedAt).format(format)
-          });
-        }
-      });
-    });
-
-    this.exporter.export(data, `decaissements_${moment().format('DD-MM-YYYY')}`);
-  }
-
   private filter(community: Community, filters: string) {
     const matchFilter = [];
     const filterArray = filters.split('+');
@@ -105,7 +82,7 @@ export class CommunitiesComponent implements OnInit, AfterViewInit {
       const customFilter = [];
 
       fields.forEach(field => {
-        if(typeof field === 'string') {
+        if (typeof field === 'string') {
           customFilter.push(field.toLocaleLowerCase().includes(filter));
         }
       });

@@ -43,7 +43,7 @@ module.exports = function(Payment) {
         const payments = await Payment.find({
             include: ['debts'],
             where: {
-                disbursedAt: null
+                disbursedAt: null,
             }
         });
 
@@ -57,7 +57,9 @@ module.exports = function(Payment) {
                 credit: {
                     neq: ''
                 },
-                disbursedAt: null
+                disbursedAt: null,
+                rib: null,
+                unknown: null
             }
         });
 

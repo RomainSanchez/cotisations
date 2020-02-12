@@ -25,7 +25,6 @@ import { MatchesComponent } from './matches/matches.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { AccountComponent } from './account/account.component';
 import { ErrorsComponent } from './errors/errors.component';
-import { ErrorComponent } from './error/error.component';
 import { UnknownComponent } from './unknown/unknown.component';
 import { RibsComponent } from './ribs/ribs.component';
 
@@ -43,7 +42,6 @@ import { RibsComponent } from './ribs/ribs.component';
     ConfirmationDialogComponent,
     AccountComponent,
     ErrorsComponent,
-    ErrorComponent,
     UnknownComponent,
     RibsComponent
   ],
