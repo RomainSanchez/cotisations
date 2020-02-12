@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './communities.component.html',
   styleUrls: ['./communities.component.sass']
 })
-export class CommunitiesComponent implements OnInit {
+export class CommunitiesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -70,6 +70,29 @@ export class CommunitiesComponent implements OnInit {
 
   rowClicked(communityId: number) {
     this.router.navigate(['/account', communityId]);
+  }
+
+  export() {
+    const data = [];
+    const format = 'DD/MM/YYYY';
+
+    this.paidDebtDataSource.data.forEach((debt: Debt) => {
+      debt.payments.forEach((payment: Payment) => {
+        if (payment.disbursedAt !== null) {
+          console.log(moment(payment.disbursedAt).format('D/M/YYYY'))
+          data.push({
+            Période: debt.date,
+            Collectivité: debt.community.label,
+            Montant: payment.credit,
+            'Date d\'encaissement': moment(payment.date).format(format),
+            'Date de valeur': moment(payment.valueDate).format(format),
+            'Date de décaissement': moment(payment.disbursedAt).format(format)
+          });
+        }
+      });
+    });
+
+    this.exporter.export(data, `decaissements_${moment().format('DD-MM-YYYY')}`);
   }
 
   private filter(community: Community, filters: string) {
