@@ -58,8 +58,8 @@ module.exports = function(Payment) {
                     neq: ''
                 },
                 disbursedAt: null,
-                rib: null,
-                unknown: null
+                rib: 0,
+                unknown: 0
             }
         });
 
