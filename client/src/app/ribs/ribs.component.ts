@@ -15,6 +15,8 @@ export class RibsComponent implements OnInit, AfterViewInit {
 
   private tableDataSource: MatTableDataSource<Payment>;
   private payments: Payment[];
+  exportSheetName = 'Feuille1';
+  exportFileName = 'virements-mauvais-rib';
 
   displayedColumns: any = [
     'select',
