@@ -27,6 +27,7 @@ import { AccountComponent } from './account/account.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { UnknownComponent } from './unknown/unknown.component';
 import { RibsComponent } from './ribs/ribs.component';
+import { InvalidComponent } from './invalid/invalid.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { RibsComponent } from './ribs/ribs.component';
     AccountComponent,
     ErrorsComponent,
     UnknownComponent,
-    RibsComponent
+    RibsComponent,
+    InvalidComponent
   ],
   imports: [
     AppRoutingModule,

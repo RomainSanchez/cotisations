@@ -76,6 +76,20 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="invalid">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Invalider</mat-header-cell>
+      <mat-cell class="invalid-cell" *matCellDef="let debt" (click)="$event.stopPropagation()">
+        <button
+          (click)="openInvalidConfirmationDialog(debt)"
+          mat-mini-fab
+          color="primary"
+          matTooltip="Invalider"
+        >
+          <mat-icon class="invalid-icon mat-18">cancel</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
 
     <mat-row *matRowDef="let debt; columns: displayedColumns"

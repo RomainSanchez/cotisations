@@ -33,6 +33,10 @@
     },
     "value": {
       "type": "string"
+    },
+    "invalid": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

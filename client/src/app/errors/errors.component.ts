@@ -30,11 +30,11 @@ export class ErrorsComponent implements OnInit {
     'credit',
     'matched'
   ];
-  pageSize: number = 10;
+  pageSize= 10;
   pageSizeOptions: number[] = [5, 10, 20, 50, 100];
   selection: SelectionModel<Payment> = new SelectionModel<Payment>(true, []);
-  exportSheetName: string = 'Feuille1';
-  exportFileName: string = 'erreur-libellés';
+  exportSheetName = 'Feuille1';
+  exportFileName = 'erreur-libellés';
   ratio: number;
 
   isLoading = false;

@@ -122,9 +122,6 @@ export class RibsComponent implements OnInit, AfterViewInit {
     const matchFilter = [];
     const filterArray = filters.split('+');
 
-    delete payment.debts;
-    delete payment.id;
-
     const fields = Object.values(payment).filter(Boolean);
 
     filterArray.forEach(filter => {

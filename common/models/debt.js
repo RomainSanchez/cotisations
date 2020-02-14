@@ -4,7 +4,10 @@ module.exports = function(Debt) {
     Debt.getUnmatched = () => {
         const debts = Debt.find({
             include: ['community', 'payments'],
-            limit: 200
+            limit: 200,
+            where: {
+                invalid: 0
+            }
         });
 
         return debts.filter(debt => debt.payments().length === 0);
@@ -13,6 +16,9 @@ module.exports = function(Debt) {
     Debt.getMatched = () => {
         const debts = Debt.find({
             include: ['payments', 'community'],
+            where: {
+                invalid: 0
+            }
         });
 
         return debts.filter(debt => debt.payments().length > 0);

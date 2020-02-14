@@ -26,7 +26,8 @@ export class DebtsComponent implements OnInit, AfterViewInit {
     'basis',
     'type',
     'amount',
-    'delete'
+    'delete',
+    'invalid'
   ];
   pageSize = 10;
   pageSizeOptions = [5, 10, 20, 50, 100];
@@ -142,7 +143,7 @@ export class DebtsComponent implements OnInit, AfterViewInit {
 
   applyPeriod() {
     this.tableDataSource.data = this.debts.filter((debt: Debt) => {
-      const debtMonth = parseInt(debt.date.split('/')[0]);
+      const debtMonth = parseInt(debt.date.split('/')[0], 10);
 
       if (this.fromPeriod !== null) {
         return debtMonth >= this.fromPeriod &&
@@ -179,6 +180,22 @@ export class DebtsComponent implements OnInit, AfterViewInit {
           this.snackBar.open('Déclaration supprimée', null, {
             duration: 2000,
           });
+        });
+      }
+    });
+  }
+
+  openInvalidConfirmationDialog(debt: Debt) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: 'Voulez vous vraiment invalider cette déclaration ?'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        debt.invalid = true;
+        this.debtApi.replaceById(debt.id, debt).subscribe(() => {
+          this.getDebts();
         });
       }
     });

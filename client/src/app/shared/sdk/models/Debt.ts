@@ -17,6 +17,7 @@ export interface DebtInterface {
   "value"?: string;
   "id"?: number;
   "communityId"?: number;
+  "invalid": boolean;
   community?: Community;
   payments?: Payment[];
 }
@@ -32,6 +33,7 @@ export class Debt implements DebtInterface {
   "type": string;
   "value": string;
   "id": number;
+  "invalid": boolean;
   "communityId": number;
   community: Community;
   payments: Payment[];
