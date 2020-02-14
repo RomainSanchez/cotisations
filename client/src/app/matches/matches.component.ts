@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
-import { Payment, Debt, Community } from '../shared/sdk/models/index';
+import { Payment, Debt } from '../shared/sdk/models/index';
 import { PaymentApi, DebtApi } from '../shared/sdk/services/index';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-import { SelectionModel } from '@angular/cdk/collections';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ExportService } from '../services/export';
 import * as moment from 'moment';
@@ -154,7 +153,8 @@ export class MatchesComponent implements OnInit, AfterViewInit {
   export() {
     const addedIds = [];
     const data = [];
-    const format = 'DD/MM/YYYY';
+    const inputFormat = 'D/M/YY';
+    const outputFormat = 'DD/MM/YYYY';
 
     this.paidDebtDataSource.data.forEach((debt: Debt) => {
       debt.payments.forEach((payment: Payment) => {
@@ -165,9 +165,9 @@ export class MatchesComponent implements OnInit, AfterViewInit {
             'Montant déclaré': debt.amount,
             'Montant versé': payment.credit,
             Libellé: payment.label,
-            'Date d\'encaissement': moment(payment.date).format(format),
-            'Date de valeur': moment(payment.valueDate).format(format),
-            'Date de décaissement': moment(payment.disbursedAt).format(format)
+            'Date d\'encaissement': moment(payment.date, inputFormat).format(outputFormat),
+            'Date de valeur': moment(payment.valueDate, inputFormat).format(outputFormat),
+            'Date de décaissement': moment(payment.disbursedAt).format(outputFormat)
           });
 
           addedIds.push(payment.id);
